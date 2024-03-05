@@ -159,16 +159,26 @@ func (r *RestobjectResource) Schema(_ context.Context, _ resource.SchemaRequest,
 				Optional:    true,
 				Attributes: map[string]schema.Attribute{
 					"search_key": schema.StringAttribute{
+						Description: "Key to identify a specific data record in the data array. " +
+							"This should be a unique identifier e.g. `name`. Similar to `results_key`, " +
+							"the value can have the format `path/to/key` to search for a nested object.",
 						Optional: true,
 					},
 					"search_value": schema.StringAttribute{
+						Description: "Value to compare with the value of `search_key` to determine whether " +
+							"the correct object has been found. Example: If `search_key=name` and `search_value=foo`, " +
+							"the record in the data array with the matching attribute `name=foo` is used.",
 						Optional: true,
 					},
 					"result_key": schema.StringAttribute{
+						Description: "Key to identify the data array with result objects in the API response. " +
+							"The format is `path/to/key`. If this key is omitted, it is assumed that " +
+							"the response data is already an array and should be used directly.",
 						Optional: true,
 					},
 					"query_string": schema.StringAttribute{
-						Optional: true,
+						Description: "Defaults to `query_string`. Optional query string used for API read requests.",
+						Optional:    true,
 					},
 				},
 			},
