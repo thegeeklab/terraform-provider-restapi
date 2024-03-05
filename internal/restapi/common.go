@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"regexp"
 	"strings"
 )
 
@@ -50,7 +51,7 @@ func GetStringAtKey(data map[string]any, path string) (string, error) {
 // Returns 1.
 func GetObjectAtKey(data map[string]any, path string) (any, error) {
 	hash := data
-	parts := strings.Split(path, "/")
+	parts := strings.Split(SanitizePath(path), "/")
 	part := ""
 	seen := ""
 
@@ -138,4 +139,14 @@ func GetRequestData(data, overwrite map[string]any) (string, error) {
 	}
 
 	return string(b), nil
+}
+
+// SanitizePath removes duplicate slashes and trailing slash from the provided path.
+func SanitizePath(path string) string {
+	// Replace multiple slashes with single slash
+	path = regexp.MustCompile(`/{2,}`).ReplaceAllString(path, "/")
+	path = strings.TrimSuffix(path, "/")
+	path = strings.TrimPrefix(path, "/")
+
+	return path
 }

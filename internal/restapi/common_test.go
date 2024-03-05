@@ -76,12 +76,21 @@ func TestGetObjectAtKey(t *testing.T) {
 		{
 			name: "valid direct key",
 			data: map[string]any{
-				"a": map[string]any{
-					"b": 123,
+				"a": 123,
+			},
+			key:     "a",
+			want:    123,
+			wantErr: nil,
+		},
+		{
+			name: "valid nested slice",
+			data: map[string]any{
+				"foo": map[string]any{
+					"bar": []any{1, "2", 3},
 				},
 			},
-			key:     "a/b",
-			want:    123,
+			key:     "foo/bar/1",
+			want:    "2",
 			wantErr: nil,
 		},
 		{
@@ -109,6 +118,17 @@ func TestGetObjectAtKey(t *testing.T) {
 			},
 			key:     "foo/baz",
 			want:    nil,
+			wantErr: ErrObjectKeyNotFound,
+		},
+		{
+			name: "unsaitized path",
+			data: map[string]any{
+				"foo": map[string]any{
+					"bar": "baz",
+				},
+			},
+			key:     "//foo/////bar///",
+			want:    "baz",
 			wantErr: ErrObjectKeyNotFound,
 		},
 	}
