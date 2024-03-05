@@ -18,19 +18,19 @@ func TestCreate(t *testing.T) {
 	tests := []struct {
 		name    string
 		key     string
-		want    testAPIObject
+		want    testObject
 		wantErr error
 	}{
 		{
 			name:    "create minimal",
 			key:     "minimal",
-			want:    newTestObject(t, testingDataObjects["minimal"]),
+			want:    newTestObject(t, testObjectData["minimal"]),
 			wantErr: nil,
 		},
 		{
 			name:    "invalid input",
 			key:     "",
-			want:    testAPIObject{},
+			want:    testObject{},
 			wantErr: ErrCreateObject,
 		},
 	}

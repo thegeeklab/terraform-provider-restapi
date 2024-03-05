@@ -26,42 +26,62 @@ func TestRead(t *testing.T) {
 	)
 
 	tests := []struct {
-		name    string
-		opts    *ObjectOptions
-		want    testAPIObject
-		wantErr error
+		name      string
+		opts      *ObjectOptions
+		data      []testObject
+		want      testObject
+		wantIndex int
+		wantErr   error
 	}{
 		{
-			name:    "valid id",
+			name:    "valid object",
 			opts:    &ObjectOptions{ID: "minimal", GetPath: "/get"},
-			want:    newTestObject(t, testingDataObjects["minimal"]),
+			want:    newTestObject(t, testObjectData["minimal"]),
+			wantErr: nil,
+		},
+		{
+			name: "valid array",
+			opts: &ObjectOptions{
+				ID:         "minimal",
+				GetPath:    "/get",
+				Path:       "/get",
+				ReadSearch: &ReadSearch{SearchKey: "id", SearchValue: "2"},
+			},
+			data:    newTestObjectList(t, testObjectData["minimal"]),
+			want:    newTestObject(t, testObjectData["minimal"]),
 			wantErr: nil,
 		},
 		{
 			name:    "empty id",
 			opts:    &ObjectOptions{ID: "", GetPath: "/get"},
-			want:    testAPIObject{},
+			want:    testObject{},
 			wantErr: ErrReadObject,
 		},
 		{
 			name:    "error request",
 			opts:    &ObjectOptions{ID: "fail", GetPath: "/fail"},
-			want:    testAPIObject{},
+			want:    testObject{},
 			wantErr: restclient.ErrUnexpectedResponseCode,
 		},
 		{
 			name:    "not found request",
 			opts:    &ObjectOptions{ID: "missing", GetPath: "/missing"},
-			want:    testAPIObject{},
+			want:    testObject{},
 			wantErr: nil,
 		},
 	}
 
 	for _, tt := range tests {
+		resp := httpmock.NewJsonResponderOrPanic(http.StatusOK, tt.want)
+
+		if tt.data != nil {
+			resp = httpmock.NewJsonResponderOrPanic(http.StatusOK, tt.data)
+		}
+
 		httpmock.RegisterResponder(
 			client.Options.ReadMethod,
 			"https://restapi.local/get",
-			httpmock.NewJsonResponderOrPanic(http.StatusOK, tt.want),
+			resp,
 		)
 
 		t.Run(tt.name, func(t *testing.T) {

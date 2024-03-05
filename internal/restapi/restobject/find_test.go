@@ -19,21 +19,21 @@ func TestFind(t *testing.T) {
 		name        string
 		searchKey   string
 		searchValue string
-		want        testAPIObject
+		want        testObject
 		wantErr     error
 	}{
 		{
 			name:        "find cat",
 			searchKey:   "thing",
 			searchValue: "cat",
-			want:        newTestObject(t, testingDataObjects["pet"]),
+			want:        newTestObject(t, testObjectData["pet"]),
 			wantErr:     nil,
 		},
 		{
 			name:        "find dog",
 			searchKey:   "thing",
 			searchValue: "dog",
-			want:        newTestObject(t, testingDataObjects["pet"]),
+			want:        newTestObject(t, testObjectData["pet"]),
 			wantErr:     ErrFindObject,
 		},
 	}
@@ -41,11 +41,11 @@ func TestFind(t *testing.T) {
 		httpmock.RegisterResponder(
 			client.Options.ReadMethod,
 			fmt.Sprintf("https://restapi.local/%s", tt.searchValue),
-			httpmock.NewJsonResponderOrPanic(http.StatusOK, []testAPIObject{tt.want}),
+			httpmock.NewJsonResponderOrPanic(http.StatusOK, []testObject{tt.want}),
 		)
 
 		t.Run(tt.name, func(t *testing.T) {
-			ro, _ := New(client, &ObjectOptions{Path: fmt.Sprintf("/%s", tt.searchValue)})
+			ro, _ := New(client, &ObjectOptions{Path: tt.searchValue})
 
 			got, err := ro.Find(context.Background(), "", tt.searchKey, tt.searchValue, "")
 			if tt.wantErr != nil {

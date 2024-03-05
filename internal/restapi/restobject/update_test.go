@@ -25,13 +25,13 @@ func TestUpdate(t *testing.T) {
 		{
 			name:    "update id",
 			key:     "dummy",
-			data:    testingDataObjects["minimal"],
+			data:    testObjectData["minimal"],
 			wantErr: nil,
 		},
 		{
 			name:    "update empty id",
 			key:     "",
-			data:    testingDataObjects["minimal"],
+			data:    testObjectData["minimal"],
 			wantErr: ErrUpdateObject,
 		},
 	}

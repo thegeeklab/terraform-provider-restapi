@@ -10,7 +10,7 @@ import (
 	"github.com/jarcoal/httpmock"
 )
 
-type testAPIObject struct {
+type testObject struct {
 	ID       string            `json:"id"`
 	Revision int               `json:"revision,omitempty"`
 	Thing    string            `json:"thing,omitempty"`
@@ -19,7 +19,9 @@ type testAPIObject struct {
 	Attrs    map[string]string `json:"attrs,omitempty"`
 }
 
-var testingDataObjects = map[string]string{
+type testObjectList []testObject
+
+var testObjectData = map[string]string{
 	"normal": `{
 	  "id": "1",
 	  "revision": 1,
@@ -70,10 +72,10 @@ var testingDataObjects = map[string]string{
     }`,
 }
 
-func newTestObject(t *testing.T, input string) testAPIObject {
+func newTestObject(t *testing.T, input string) testObject {
 	t.Helper()
 
-	var testObject testAPIObject
+	var testObject testObject
 
 	if err := json.Unmarshal([]byte(input), &testObject); err != nil {
 		t.Fatalf("failed to unmarshall json from '%s'", input)
@@ -82,7 +84,25 @@ func newTestObject(t *testing.T, input string) testAPIObject {
 	return testObject
 }
 
-func mapToTestObject(t *testing.T, resp APIResponse) testAPIObject {
+func newTestObjectList(t *testing.T, input ...string) testObjectList {
+	t.Helper()
+
+	list := make(testObjectList, 0, len(input))
+
+	for _, input := range input {
+		var testObject testObject
+
+		if err := json.Unmarshal([]byte(input), &testObject); err != nil {
+			t.Fatalf("failed to unmarshall json from '%s'", input)
+		}
+
+		list = append(list, testObject)
+	}
+
+	return list
+}
+
+func mapToTestObject(t *testing.T, resp APIResponse) testObject {
 	t.Helper()
 
 	// Convert map to json string
