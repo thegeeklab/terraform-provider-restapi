@@ -1,0 +1,6 @@
+/dist
+/release
+/terraform-provider-restapi*
+
+coverage.out
+CHANGELOG.md
