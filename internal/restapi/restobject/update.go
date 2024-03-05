@@ -13,6 +13,12 @@ import (
 
 var ErrUpdateObject = errors.New("failed to update object")
 
+// Update updates the RestObject by sending a PUT request to the API.
+// It returns an error if the ID is not set, if there is an error building the
+// request data, or if there is an error sending the request.
+//
+// If write_returns_object is true, it will parse the response and update the
+// RestObject. Otherwise it will re-read the object from the API after the update.
 func (ro *RestObject) Update(ctx context.Context) error {
 	opts := ro.Options
 

@@ -17,6 +17,12 @@ var (
 	ErrFindResponse = errors.New("failed to read response from find object")
 )
 
+// Find searches the REST API for an object matching the given search criteria.
+// It issues a GET request to the API path, optionally adding the queryString.
+// It parses the JSON response, extracting the result array at resultKey.
+// It loops through the array looking for an object where searchKey equals searchValue.
+// If found, it returns that object as the APIResponse.
+// It also extracts the ID attribute into the RestObject options.
 func (ro *RestObject) Find(
 	ctx context.Context, queryString, searchKey, searchValue, resultKey string,
 ) (APIResponse, error) {
@@ -103,6 +109,10 @@ func (ro *RestObject) Find(
 	return resp, nil
 }
 
+// getDataArray extracts the data array from the find result.
+// If resultKey is specified, it looks for that key in the result map.
+// Otherwise, it expects the result to be a data array directly.
+// Returns the data array and any error.
 func getDataArray(result any, resultKey string) ([]any, error) {
 	var (
 		data []any

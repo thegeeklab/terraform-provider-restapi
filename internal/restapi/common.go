@@ -14,9 +14,11 @@ var (
 	ErrJSONMarshal       = errors.New("can not parse json")
 )
 
-// GetStringAtKey uses GetObjectAtKey to verify the resulting object is either
-// a JSON string or Number and returns it as a string.
-func GetStringAtKey(data map[string]interface{}, path string) (string, error) {
+// GetStringAtKey returns the string value at the given slash-delimited path
+// in the provided map[string]any data. It will attempt to convert
+// values of other types like numbers to strings. Returns error if path not
+// found or value is not a string or convertible type.
+func GetStringAtKey(data map[string]any, path string) (string, error) {
 	res, err := GetObjectAtKey(data, path)
 	if err != nil {
 		return "", err
@@ -32,26 +34,21 @@ func GetStringAtKey(data map[string]interface{}, path string) (string, error) {
 	}
 }
 
-// GetObjectAtKey is a handy helper that will dig through a map and find something
-// at the defined key. The returned data is not type checked
+// GetObjectAtKey recursively traverses a map[string]any to find the value
+// at the given slash-delimited path. It can handle maps and slices in the path.
 //
-// Example:
-// Given:
+// Example inputs:
 //
-//	{
-//		"attrs": {
-//			"id": 1234
-//		},
-//		"config": {
-//			"foo": "abc",
-//			"bar": "xyz"
-//		}
+//	data = {
+//	  "foo": {
+//	    "bar": [1, 2, 3]
+//	  }
 //	}
 //
-// Result:
-// attrs/id => 1234
-// config/foo => "abc".
-func GetObjectAtKey(data map[string]interface{}, path string) (interface{}, error) {
+// path = "foo/bar/0"
+//
+// Returns 1.
+func GetObjectAtKey(data map[string]any, path string) (any, error) {
 	hash := data
 	parts := strings.Split(path, "/")
 	part := ""
@@ -69,10 +66,10 @@ func GetObjectAtKey(data map[string]interface{}, path string) (interface{}, erro
 		if _, ok := hash[part]; ok {
 			seen += "/" + part
 
-			if tmp, ok := hash[part].(map[string]interface{}); ok {
+			if tmp, ok := hash[part].(map[string]any); ok {
 				hash = tmp
-			} else if tmp, ok := hash[part].([]interface{}); ok {
-				mapString := make(map[string]interface{})
+			} else if tmp, ok := hash[part].([]any); ok {
+				mapString := make(map[string]any)
 
 				for key, value := range tmp {
 					strKey := fmt.Sprintf("%v", key)
@@ -99,8 +96,8 @@ func GetObjectAtKey(data map[string]interface{}, path string) (interface{}, erro
 	return hash[part], nil
 }
 
-// GetKeys is a handy helper to just dump the keys of a map into a slice.
-func GetKeys(hash map[string]interface{}) []string {
+// GetKeys returns a slice containing all the keys in the given hash map.
+func GetKeys(hash map[string]any) []string {
 	keys := make([]string, 0)
 
 	for k := range hash {
@@ -110,8 +107,8 @@ func GetKeys(hash map[string]interface{}) []string {
 	return keys
 }
 
-// GetEnvOrDefault is a helper function that returns the value of the
-// given environment variable, if one exists, or the default value.
+// GetEnvOrDefault returns the value of the environment variable k if set,
+// or defaultvalue if not set.
 func GetEnvOrDefault(k, defaultvalue string) string {
 	v := os.Getenv(k)
 	if v == "" {
@@ -121,6 +118,9 @@ func GetEnvOrDefault(k, defaultvalue string) string {
 	return v
 }
 
+// GetRequestData marshals the provided data map into a JSON string.
+// If overwrite is provided, it will override data.
+// Returns the JSON string and any error from json.Marshal.
 func GetRequestData(data, overwrite map[string]any) (string, error) {
 	var err error
 

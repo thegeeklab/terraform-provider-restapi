@@ -13,6 +13,9 @@ import (
 
 var ErrCreateObject = errors.New("failed to create object")
 
+// Create uses the RestObject's client to send a POST request to create the
+// object on the remote API. It handles setting the object's ID from the
+// response and syncing the object's state.
 func (ro *RestObject) Create(ctx context.Context) error {
 	opts := ro.Options
 

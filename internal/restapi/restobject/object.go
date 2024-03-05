@@ -18,7 +18,10 @@ import (
 var ErrInvalidObjectOptions = errors.New("invalid object options")
 
 type (
-	APIPayload  map[string]any
+	// APIPayload is a map that contains arbitrary JSON-serializable data
+	// representing the payload of an API request.
+	APIPayload map[string]any
+	// APIResponse is a map that contains arbitrary response data.
 	APIResponse map[string]any
 )
 
@@ -59,7 +62,10 @@ type ReadSearch struct {
 	QueryString string
 }
 
-// NewAPIObject makes an APIobject to manage a RESTful object in an API.
+// New creates a new RestObject instance with the given client and options.
+// It sets default values for the object options if they are not provided,
+// using values from the client options. It also tries to set the object ID
+// from the provided data if an ID is not already set in the options.
 func New(client *restclient.RestClient, opts *ObjectOptions) (*RestObject, error) {
 	URLSuffixID := "{id}"
 	ro := &RestObject{}
@@ -125,7 +131,7 @@ func New(client *restclient.RestClient, opts *ObjectOptions) (*RestObject, error
 	return ro, nil
 }
 
-// Convert the important bits about this object to string representation.
+// ToString returns a string representation of the RestObject options.
 func (ro *RestObject) ToString() string {
 	var buffer bytes.Buffer
 
@@ -150,8 +156,9 @@ func (ro *RestObject) ToString() string {
 	return buffer.String()
 }
 
-// Centralized function to ensure that our data as managed by
-// the api_object is updated with data that has come back from the API.
+// setData updates the RestObject's data from the provided API response.
+// It extracts the ID if not already set, copies configured keys from the
+// API response to the data, and stores the raw API response.
 func (ro *RestObject) setData(ctx context.Context, state string) error {
 	opts := ro.Options
 

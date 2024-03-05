@@ -69,7 +69,11 @@ type RestClient struct {
 	oauthConfig *clientcredentials.Config
 }
 
-// NewClient makes a new api client for RESTful calls.
+// New creates a new RestClient instance.
+// It takes a context and ClientOptions, and returns a RestClient instance and error.
+// It initializes the RestClient with the provided options, creating the HTTP client,
+// OAuth client if configured, rate limiter, etc.
+// It returns any errors encountered while initializing the client.
 func New(ctx context.Context, opts *ClientOptions) (*RestClient, error) {
 	if opts.Endpoint == "" {
 		return nil, fmt.Errorf("%w: endpoint not set", ErrInvalidClientOptions)
@@ -172,8 +176,9 @@ func New(ctx context.Context, opts *ClientOptions) (*RestClient, error) {
 	return &rc, nil
 }
 
-// Helper function that handles sending/receiving and handling
-// of HTTP data in and out.
+// SendRequest sends an HTTP request to the configured API endpoint.
+// It handles constructing the request, adding headers and authentication,
+// rate limiting, logging, and error handling.
 func (rc *RestClient) SendRequest(ctx context.Context, method, path, data string) (string, int, error) {
 	var (
 		req *http.Request
@@ -259,7 +264,7 @@ func (rc *RestClient) SendRequest(ctx context.Context, method, path, data string
 	return body, resp.StatusCode, nil
 }
 
-// Convert the important bits about this object to string representation.
+// ToString returns a string representation of the RestClient options.
 func (rc *RestClient) ToString() string {
 	var buffer bytes.Buffer
 

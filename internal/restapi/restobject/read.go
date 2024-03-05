@@ -14,6 +14,8 @@ import (
 
 var ErrReadObject = errors.New("failed to read object")
 
+// Read retrieves the RestObject from the API based on the configured ID and options.
+// It handles errors and unset IDs. It can also search the response and return a matched object.
 func (ro *RestObject) Read(ctx context.Context) error {
 	opts := ro.Options
 

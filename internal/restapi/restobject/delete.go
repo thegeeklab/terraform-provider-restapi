@@ -11,6 +11,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
+// Delete deletes the RestObject from the API by sending a DELETE request.
+// It returns an error if the delete request fails.
 func (ro *RestObject) Delete(ctx context.Context) error {
 	var err error
 
