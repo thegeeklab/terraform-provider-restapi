@@ -50,51 +50,50 @@ func GetStringAtKey(data map[string]any, path string) (string, error) {
 //
 // Returns 1.
 func GetObjectAtKey(data map[string]any, path string) (any, error) {
-	hash := data
+	var (
+		seen, part string
+		i          int
+	)
+
 	parts := strings.Split(SanitizePath(path), "/")
-	part := ""
-	seen := ""
 
-	for len(parts) > 1 {
-		part, parts = parts[0], parts[1:]
-
+	for i, part = range parts {
 		// Protect against double slashes by mistake
-		if part == "" {
+		if part == "" || i == len(parts)-1 {
 			continue
 		}
 
-		// See if this key exists in the hash at this point
-		if _, ok := hash[part]; ok {
-			seen += "/" + part
-
-			if tmp, ok := hash[part].(map[string]any); ok {
-				hash = tmp
-			} else if tmp, ok := hash[part].([]any); ok {
-				mapString := make(map[string]any)
-
-				for key, value := range tmp {
-					strKey := fmt.Sprintf("%v", key)
-					mapString[strKey] = value
-				}
-
-				hash = mapString
-			} else {
-				return nil, fmt.Errorf("%w: object '%s': not a map, please check the path", ErrInvalidObjectType, seen)
-			}
-		} else {
+		// See if this key exists in the data at this point
+		if _, ok := data[part]; !ok {
 			return nil, fmt.Errorf("%w: want key '%s' in data after '%s': available: %s",
-				ErrObjectKeyNotFound, part, seen, strings.Join(GetKeys(hash), ","))
+				ErrObjectKeyNotFound, part, seen, strings.Join(GetKeys(data), ","))
+		}
+
+		seen += "/" + part
+
+		if tmp, ok := data[part].(map[string]any); ok {
+			data = tmp
+		} else if tmp, ok := data[part].([]any); ok {
+			mapString := make(map[string]any)
+
+			for key, value := range tmp {
+				strKey := fmt.Sprintf("%v", key)
+				mapString[strKey] = value
+			}
+
+			data = mapString
+		} else {
+			return nil, fmt.Errorf("%w: object '%s': not a map, please check the path", ErrInvalidObjectType, seen)
 		}
 	}
 
 	// Containing map of the wanted value found */
-	part = parts[0]
-	if _, ok := hash[part]; !ok {
+	if _, ok := data[part]; !ok {
 		return nil, fmt.Errorf("%w: want key '%s' in map at '%s': available: %s",
-			ErrObjectKeyNotFound, part, seen, strings.Join(GetKeys(hash), ","))
+			ErrObjectKeyNotFound, part, seen, strings.Join(GetKeys(data), ","))
 	}
 
-	return hash[part], nil
+	return data[part], nil
 }
 
 // GetKeys returns a slice containing all the keys in the given hash map.

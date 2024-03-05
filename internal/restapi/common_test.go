@@ -129,14 +129,14 @@ func TestGetObjectAtKey(t *testing.T) {
 			},
 			key:     "//foo/////bar///",
 			want:    "baz",
-			wantErr: ErrObjectKeyNotFound,
+			wantErr: nil,
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := GetObjectAtKey(tt.data, tt.key)
-			if tt.want == nil {
+			if tt.wantErr != nil {
 				assert.ErrorIs(t, err, tt.wantErr)
 
 				return

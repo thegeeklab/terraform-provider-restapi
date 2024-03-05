@@ -5,9 +5,8 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"net/http"
 	"strings"
-
-	"terraform-provider-restapi/internal/restapi/restclient"
 
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
@@ -30,9 +29,9 @@ func (ro *RestObject) Read(ctx context.Context) error {
 		getPath = fmt.Sprintf("%s?%s", opts.GetPath, opts.QueryString)
 	}
 
-	resultString, _, err := ro.client.SendRequest(ctx, opts.ReadMethod, strings.ReplaceAll(getPath, "{id}", opts.ID), "")
+	result, status, err := ro.client.SendRequest(ctx, opts.ReadMethod, strings.ReplaceAll(getPath, "{id}", opts.ID), "")
 	if err != nil {
-		if errors.Is(err, restclient.ErrUnexpectedResponseCode) {
+		if status == http.StatusNotFound {
 			tflog.Error(ctx, fmt.Sprintf("%s: failed to refresh state for '%s' at path '%s': removing from state",
 				err, opts.ID, opts.GetPath))
 
@@ -67,8 +66,8 @@ func (ro *RestObject) Read(ctx context.Context) error {
 			return err
 		}
 
-		resultString = string(objFoundString)
+		result = string(objFoundString)
 	}
 
-	return ro.setData(ctx, resultString)
+	return ro.setData(ctx, result)
 }
