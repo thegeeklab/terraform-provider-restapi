@@ -3,12 +3,12 @@
 page_title: "restapi_object Resource - restapi"
 subcategory: ""
 description: |-
-  Example resource
+  Restapi object resource schema.
 ---
 
 # restapi_object (Resource)
 
-Example resource
+Restapi object resource schema.
 
 ## Example Usage
 

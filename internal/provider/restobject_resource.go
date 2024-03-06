@@ -80,8 +80,7 @@ func (r *RestobjectResource) Schema(_ context.Context, _ resource.SchemaRequest,
 	isDataSensitive := false
 
 	resp.Schema = schema.Schema{
-		// This description is used by the documentation generator and the language server.
-		Description: "Example resource",
+		Description: "Restapi object resource schema.",
 
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{

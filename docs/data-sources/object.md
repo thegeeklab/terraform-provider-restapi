@@ -3,12 +3,12 @@
 page_title: "restapi_object Data Source - restapi"
 subcategory: ""
 description: |-
-  Example data source
+  Restapi object data source schema.
 ---
 
 # restapi_object (Data Source)
 
-Example data source
+Restapi object data source schema.
 
 ## Example Usage
 

@@ -107,7 +107,7 @@ func (p *RestapiProvider) Schema(_ context.Context, _ provider.SchemaRequest, re
 				Optional: true,
 				Description: "If this option is set, it is used for editing REST objects. " +
 					"For example, if the ID is set to `name`, changes to the API object are made to " +
-					"`http://example.com/foo/<value_of_name>`. This value can also be a path to the ID attribute " +
+					"`http://example.com/api/<value_of_name>`. This value can also be a path to the ID attribute " +
 					"delimited by '/' if it is several levels deep in the data, e.g. `attributes/id` in the case " +
 					"of an object `{ \"attributes\": { \"id\": 1234 }, \"config\": { \"name\": \"foo\", \"something\": \"bar\"}}`.",
 			},

@@ -36,8 +36,7 @@ func (d *RestobjectDataSource) Schema(_ context.Context, _ datasource.SchemaRequ
 	isDataSensitive := false
 
 	resp.Schema = schema.Schema{
-		// This description is used by the documentation generator and the language server.
-		Description: "Example data source",
+		Description: "Restapi object data source schema.",
 
 		//nolint:goconst
 		Attributes: map[string]schema.Attribute{
