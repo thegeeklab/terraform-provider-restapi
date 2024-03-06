@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"strings"
 
-	"terraform-provider-restapi/internal/restapi"
+	"terraform-provider-restapi/internal/utils"
 
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
@@ -26,7 +26,7 @@ func (ro *RestObject) Update(ctx context.Context) error {
 		return fmt.Errorf("%w: id not set", ErrUpdateObject)
 	}
 
-	data, err := restapi.GetRequestData(opts.Data, opts.UpdateData)
+	data, err := utils.GetRequestData(opts.Data, opts.UpdateData)
 	if err != nil {
 		return err
 	}

@@ -6,7 +6,7 @@ import (
 	"testing"
 
 	"terraform-provider-restapi/internal/restapi/restclient"
-	"terraform-provider-restapi/internal/testutil"
+	"terraform-provider-restapi/internal/testutils"
 
 	"github.com/jarcoal/httpmock"
 	"github.com/stretchr/testify/assert"
@@ -40,7 +40,7 @@ func TestDelete(t *testing.T) {
 		)
 
 		t.Run(tt.name, func(t *testing.T) {
-			ctx, output := testutil.SetupRootLogger()
+			ctx, output := testutils.SetupRootLogger()
 			ro, _ := New(client, &ObjectOptions{ID: tt.key})
 
 			err := ro.Delete(ctx)
@@ -51,7 +51,7 @@ func TestDelete(t *testing.T) {
 			}
 
 			if tt.wantLog != "" {
-				assert.Truef(t, testutil.HasLogMessage(t, tt.wantLog, output), "expected log message not found: %s", tt.wantLog)
+				assert.Truef(t, testutils.HasLogMessage(t, tt.wantLog, output), "expected log message not found: %s", tt.wantLog)
 			}
 
 			assert.NoError(t, err)

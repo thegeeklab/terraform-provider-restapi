@@ -1,4 +1,4 @@
-package restapi
+package utils
 
 import (
 	"encoding/json"
@@ -13,6 +13,7 @@ var (
 	ErrInvalidObjectType = errors.New("invalid object type")
 	ErrObjectKeyNotFound = errors.New("key not found in object")
 	ErrJSONMarshal       = errors.New("can not parse json")
+	ErrInvalidImportPath = errors.New("")
 )
 
 // GetStringAtKey returns the string value at the given slash-delimited path
@@ -148,4 +149,22 @@ func SanitizePath(path string) string {
 	path = strings.TrimPrefix(path, "/")
 
 	return path
+}
+
+// ParseImportPath parses a Restobject import path string into its object ID
+// and path components.
+func ParseImportPath(id string) (string, string, error) {
+	rawID := fmt.Sprintf("/%s", SanitizePath(id))
+	n := strings.LastIndex(rawID, "/")
+
+	if n <= 0 {
+		err := fmt.Errorf("%w: api_object '%s': expected format /path/to/object_id not met", ErrInvalidImportPath, id)
+
+		return "", "", err
+	}
+
+	path := rawID[0:n]
+	id = rawID[n+1:]
+
+	return id, path, nil
 }

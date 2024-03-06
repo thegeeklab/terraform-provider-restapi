@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"strings"
 
-	"terraform-provider-restapi/internal/restapi"
+	"terraform-provider-restapi/internal/utils"
 
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
@@ -32,7 +32,7 @@ func (ro *RestObject) Delete(ctx context.Context) error {
 		deletePath = fmt.Sprintf("%s?%s", opts.DeletePath, opts.QueryString)
 	}
 
-	data, err := restapi.GetRequestData(opts.DestroyData, nil)
+	data, err := utils.GetRequestData(opts.DestroyData, nil)
 	if err != nil {
 		return err
 	}

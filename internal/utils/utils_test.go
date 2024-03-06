@@ -1,4 +1,4 @@
-package restapi
+package utils
 
 import (
 	"testing"
@@ -224,6 +224,51 @@ func TestGetRequestData(t *testing.T) {
 
 			assert.NoError(t, err)
 			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func TestParseImportPath(t *testing.T) {
+	tests := []struct {
+		name     string
+		id       string
+		wantID   string
+		wantPath string
+		wantErr  error
+	}{
+		{
+			name:     "valid path",
+			id:       "/api/v1/objects/123",
+			wantID:   "123",
+			wantPath: "/api/v1/objects",
+			wantErr:  nil,
+		},
+		{
+			name:     "valid path with trailing slash",
+			id:       "/api/v1/objects/123/",
+			wantID:   "123",
+			wantPath: "/api/v1/objects",
+			wantErr:  nil,
+		},
+		{
+			name:    "invalid path",
+			id:      "123",
+			wantErr: assert.AnError,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			gotID, gotN, err := ParseImportPath(tt.id)
+			if tt.wantErr != nil {
+				assert.Error(t, err)
+
+				return
+			}
+
+			assert.NoError(t, err)
+			assert.Equal(t, tt.wantID, gotID)
+			assert.Equal(t, tt.wantPath, gotN)
 		})
 	}
 }

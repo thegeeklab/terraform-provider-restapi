@@ -7,9 +7,10 @@ import (
 
 	"terraform-provider-restapi/internal/restapi/restclient"
 	"terraform-provider-restapi/internal/restapi/restobject"
+	"terraform-provider-restapi/internal/utils"
 
+	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
-	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
@@ -394,7 +395,49 @@ func (r *RestobjectResource) Delete(ctx context.Context, req resource.DeleteRequ
 func (r *RestobjectResource) ImportState(
 	ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse,
 ) {
-	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
+	var diags diag.Diagnostics
+
+	id, path, err := utils.ParseImportPath(req.ID)
+	if err != nil {
+		resp.Diagnostics.AddError("Failed to import state", err.Error())
+
+		return
+	}
+
+	readSearchAttrTypes := map[string]attr.Type{
+		"search_key":   types.StringType,
+		"search_value": types.StringType,
+		"result_key":   types.StringType,
+		"query_string": types.StringType,
+	}
+
+	data := RestobjectResourceModel{
+		ID:   types.StringValue(id),
+		Data: types.StringValue(fmt.Sprintf(`{ "id": "%s" }`, id)),
+		Path: types.StringValue(path),
+	}
+	data.ReadSearch = types.ObjectNull(readSearchAttrTypes)
+
+	objectOpts, diags := toObjectOptions(ctx, data)
+	resp.Diagnostics.Append(diags...)
+
+	ro, err := restobject.New(r.client, objectOpts)
+	if err != nil {
+		resp.Diagnostics.AddError("Failed to create API client", err.Error())
+
+		return
+	}
+
+	if err := ro.Read(ctx); err != nil {
+		resp.Diagnostics.AddError("Failed to import state", err.Error())
+
+		return
+	}
+
+	resp.Diagnostics.Append(mapFields(ctx, ro.Options, &data)...)
+
+	// Save data into Terraform state
+	resp.Diagnostics.Append(resp.State.Set(ctx, data)...)
 }
 
 //nolint:gocyclo,gocognit

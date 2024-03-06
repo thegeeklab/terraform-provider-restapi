@@ -8,8 +8,8 @@ import (
 	"fmt"
 	"path/filepath"
 
-	"terraform-provider-restapi/internal/restapi"
 	"terraform-provider-restapi/internal/restapi/restclient"
+	"terraform-provider-restapi/internal/utils"
 
 	"github.com/davecgh/go-spew/spew"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
@@ -115,7 +115,7 @@ func New(client *restclient.RestClient, opts *ObjectOptions) (*RestObject, error
 	if opts.Data != nil && opts.ID == "" {
 		var tmp string
 
-		tmp, err := restapi.GetStringAtKey(opts.Data, opts.IDAttribute)
+		tmp, err := utils.GetStringAtKey(opts.Data, opts.IDAttribute)
 		if err == nil {
 			opts.ID = tmp
 		} else if !client.Options.WriteReturnsObject && !client.Options.CreateReturnsObject && opts.Path == "" {
@@ -175,7 +175,7 @@ func (ro *RestObject) setData(ctx context.Context, state string) error {
 	// A usable ID was not passed (in constructor or here),
 	// so we have to guess what it is from the data structure.
 	if opts.ID == "" {
-		val, err := restapi.GetStringAtKey(opts.APIResponse, opts.IDAttribute)
+		val, err := utils.GetStringAtKey(opts.APIResponse, opts.IDAttribute)
 		if err != nil {
 			return fmt.Errorf("error extracting id from data element: %w", err)
 		}

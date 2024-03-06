@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"strings"
 
-	"terraform-provider-restapi/internal/restapi"
+	"terraform-provider-restapi/internal/utils"
 
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
@@ -27,7 +27,7 @@ func (ro *RestObject) Create(ctx context.Context) error {
 		return fmt.Errorf("%w: %s", ErrCreateObject, "no id and client not configured to read response")
 	}
 
-	data, err := restapi.GetRequestData(opts.Data, nil)
+	data, err := utils.GetRequestData(opts.Data, nil)
 	if err != nil {
 		return err
 	}

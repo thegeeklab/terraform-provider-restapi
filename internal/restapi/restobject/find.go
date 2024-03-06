@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"reflect"
 
-	"terraform-provider-restapi/internal/restapi"
+	"terraform-provider-restapi/internal/utils"
 
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
@@ -73,7 +73,7 @@ func (ro *RestObject) Find(
 		tflog.Debug(ctx, fmt.Sprintf("examining %v", hash))
 		tflog.Debug(ctx, fmt.Sprintf("comparing '%s' to value of '%s'", searchValue, searchKey))
 
-		tmp, err := restapi.GetStringAtKey(hash, searchKey)
+		tmp, err := utils.GetStringAtKey(hash, searchKey)
 		if err != nil {
 			return resp, (fmt.Errorf("%w: %w: failed to get value of '%s' in results array at '%s'",
 				ErrFindResponse, err, searchKey, resultKey))
@@ -83,7 +83,7 @@ func (ro *RestObject) Find(
 		if tmp == searchValue {
 			resp = hash
 
-			opts.ID, err = restapi.GetStringAtKey(hash, opts.IDAttribute)
+			opts.ID, err = utils.GetStringAtKey(hash, opts.IDAttribute)
 			if err != nil {
 				return resp, fmt.Errorf("%w: %w: no id_attribute '%s' in the record",
 					ErrFindResponse, err, opts.IDAttribute)
@@ -136,7 +136,7 @@ func getDataArray(result any, resultKey string) ([]any, error) {
 			ErrFindResponse, resultKey)
 	}
 
-	tmp, err = restapi.GetObjectAtKey(result.(map[string]any), resultKey)
+	tmp, err = utils.GetObjectAtKey(result.(map[string]any), resultKey)
 	if err != nil {
 		return data, fmt.Errorf("%w: %w: result_key not found", ErrFindResponse, err)
 	}
