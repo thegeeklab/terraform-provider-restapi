@@ -100,11 +100,11 @@ release: xgo checksum
 
 .PHONY: goreleaser-release
 goreleaser-release:
-	$(GO) run $(GORELEASER_PACKAGE) release --release-notes=CHANGELOG.md
+	$(GO) run $(GORELEASER_PACKAGE) release --clean --release-notes=CHANGELOG.md
 
 .PHONY: goreleaser-snapshot
 goreleaser-snapshot:
-	$(GO) run $(GORELEASER_PACKAGE) build --snapshot
+	$(GO) run $(GORELEASER_PACKAGE) build --clean --snapshot
 
 .PHONY: deps
 deps:
