@@ -7,14 +7,15 @@ when:
 
 steps:
   - name: build
-    image: docker.io/goreleaser/goreleaser
+    image: docker.io/library/golang:1.22
     commands:
       - goreleaser build --snapshot
+      - ls -l dist/
 
   - name: executable
-    image: quay.io/thegeeklab/alpine-tools
+    image: docker.io/library/golang:1.22
     commands:
-      - $(find dist/ -executable -type f -iname ${CI_REPO_NAME}_linux_amd64) --help
+      - $(find dist/ -executable -type f -iwholename *${CI_REPO_NAME}_linux_amd64*/${CI_REPO_NAME}*) --help
 
   - name: changelog
     image: quay.io/thegeeklab/git-sv

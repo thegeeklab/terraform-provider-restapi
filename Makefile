@@ -2,6 +2,8 @@
 GOFUMPT_PACKAGE_VERSION := v0.6.0
 # renovate: datasource=github-releases depName=golangci/golangci-lint
 GOLANGCI_LINT_PACKAGE_VERSION := v1.56.1
+# renovate: datasource=github-releases depName=goreleaser/goreleaser
+GORELEASER_PACKAGE_VERSION := v1.24.0
 
 EXECUTABLE := terraform-provider-restapi
 
@@ -18,6 +20,7 @@ GOFUMPT_PACKAGE ?= mvdan.cc/gofumpt@$(GOFUMPT_PACKAGE_VERSION)
 GOLANGCI_LINT_PACKAGE ?= github.com/golangci/golangci-lint/cmd/golangci-lint@$(GOLANGCI_LINT_PACKAGE_VERSION)
 XGO_PACKAGE ?= src.techknowlogick.com/xgo@latest
 GOTESTSUM_PACKAGE ?= gotest.tools/gotestsum@latest
+GORELEASER_PACKAGE ?= github.com/goreleaser/goreleaser@$(GORELEASER_PACKAGE_VERSION)
 
 GENERATE ?=
 XGO_VERSION := go-1.22.x
@@ -95,6 +98,14 @@ checksum:
 .PHONY: release
 release: xgo checksum
 
+.PHONY: goreleaser-release
+goreleaser-release:
+	$(GO) run $(GORELEASER_PACKAGE) release --release-notes=CHANGELOG.md
+
+.PHONY: goreleaser-snapshot
+goreleaser-snapshot:
+	$(GO) run $(GORELEASER_PACKAGE) build --snapshot
+
 .PHONY: deps
 deps:
 	$(GO) mod download
@@ -102,3 +113,4 @@ deps:
 	$(GO) install $(GOLANGCI_LINT_PACKAGE)
 	$(GO) install $(XGO_PACKAGE)
 	$(GO) install $(GOTESTSUM_PACKAGE)
+	$(GO) install $(GORELEASER_PACKAGE)
