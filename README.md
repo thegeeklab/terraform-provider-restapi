@@ -8,13 +8,13 @@ Terraform provider to interact with a generic REST API.
 [![Source: GitHub](https://img.shields.io/badge/source-github-blue.svg?logo=github&logoColor=white)](https://github.com/thegeeklab/terraform-provider-restapi)
 [![License: Apache-2.0](https://img.shields.io/github/license/thegeeklab/terraform-provider-restapi)](https://github.com/thegeeklab/terraform-provider-restapi/blob/main/LICENSE)
 
-The Terraform/OpenTofu provider is used to interact with APIs for which no first-class provider is (yet) available by implementing a generic REST API client.
+The Terraform/OpenTofu provider is used to interact with API's for which no first-class provider is (yet) available by implementing a generic REST API client.
 
 ## Contributors
 
 Special thanks to all [contributors](https://github.com/thegeeklab/terraform-provider-restapi/graphs/contributors). If you would like to contribute, please see the [instructions](https://github.com/thegeeklab/terraform-provider-restapi/blob/main/CONTRIBUTING.md).
 
-This project is a fork of [Mastercard/terraform-provider-restapi](https://github.com/Mastercard/terraform-provider-restapi). Thanks for your work. Even though the code is based on Mastercard's implementation, the code has been completely rewritten and ported to the Terraform plugin framework. This provider is **not** a drop-in replacement for the original provider.
+This project is a fork of [Mastercard/terraform-provider-restapi](https://github.com/Mastercard/terraform-provider-restapi). Thanks for your work. Even though the code is based on the implementation of Mastercard, the code has been completely rewritten and ported to the Terraform plugin framework. This provider is **not** a drop-in replacement for the original provider.
 
 ## License
 

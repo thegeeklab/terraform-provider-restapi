@@ -70,29 +70,29 @@ func (p *RestapiProvider) Schema(_ context.Context, _ provider.SchemaRequest, re
 		Attributes: map[string]schema.Attribute{
 			"endpoint": schema.StringAttribute{
 				Required:    true,
-				Description: "Endpoint URI of the REST API. This serves as the base of all requests.",
+				Description: "Endpoint address of the REST API. This is used as base URL for all requests.",
 			},
 			"insecure": schema.BoolAttribute{
 				Optional:    true,
-				Description: "When using https, this disables TLS verification of the host.",
+				Description: "When using HTTPS, this disables TLS verification of the host.",
 			},
 			"username": schema.StringAttribute{
 				Optional:    true,
 				Sensitive:   true,
-				Description: "When set, will use this username for BASIC auth to the API.",
+				Description: "When set, will use this username for basic authentication to the API.",
 			},
 			"password": schema.StringAttribute{
 				Optional:    true,
 				Sensitive:   true,
-				Description: "When set, will use this password for BASIC auth to the API.",
+				Description: "When set, will use this password for basic authentication to the API.",
 			},
 			"headers": schema.MapAttribute{
 				ElementType: types.StringType,
 				Optional:    true,
 				MarkdownDescription: "A mapping of header names and values to be set on all outgoing requests. This is useful " +
-					"if you want to use a script via the `external` provider or provide a pre-approved token " +
+					"if you want to use a script via the `external` provider or provide an approved token " +
 					"or change the default Content-Type from `application/json`. If username` and `password` " +
-					"are set and Authorization is one of the headers defined here, the BASIC auth data will " +
+					"are set and Authorization is one of the headers defined here, the basic authentication data will " +
 					"take precedence.",
 			},
 			"use_cookies": schema.BoolAttribute{
@@ -161,7 +161,7 @@ func (p *RestapiProvider) Schema(_ context.Context, _ provider.SchemaRequest, re
 			},
 			"oauth_client_credentials": schema.SingleNestedAttribute{
 				Optional:    true,
-				Description: "Configuration for oauth client credential flow.",
+				Description: "Configuration for OAuth client credential flow.",
 				Attributes: map[string]schema.Attribute{
 					"client_id": schema.StringAttribute{
 						Description: "Client ID.",

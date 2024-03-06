@@ -226,7 +226,7 @@ func (rc *RestClient) SendRequest(ctx context.Context, method, path, data string
 	}
 
 	if opts.Username != "" && opts.Password != "" {
-		// ... and fall back to basic auth if configured
+		// ... and fall back to basic authentication if configured
 		req.SetBasicAuth(opts.Username, opts.Password)
 	}
 
