@@ -8,7 +8,7 @@ Terraform provider to interact with a generic REST API.
 [![Source: GitHub](https://img.shields.io/badge/source-github-blue.svg?logo=github&logoColor=white)](https://github.com/thegeeklab/terraform-provider-restapi)
 [![License: Apache-2.0](https://img.shields.io/github/license/thegeeklab/terraform-provider-restapi)](https://github.com/thegeeklab/terraform-provider-restapi/blob/main/LICENSE)
 
-This Terraform provider is used to interact with APIs for which no first-class provider is (yet) available by implementing a generic REST API client.
+The Terraform/OpenTofu provider is used to interact with APIs for which no first-class provider is (yet) available by implementing a generic REST API client.
 
 ## Contributors
 
