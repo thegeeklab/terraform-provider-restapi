@@ -10,8 +10,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/providerserver"
 )
 
-//go:generate tofu fmt -recursive ./examples/
-//go:generate go run github.com/hashicorp/terraform-plugin-docs/cmd/tfplugindocs generate -provider-name restapi
+//go:generate go run github.com/opentofu/opentofu/cmd/tofu@latest fmt -recursive ./examples/
+//go:generate go run github.com/hashicorp/terraform-plugin-docs/cmd/tfplugindocs@latest generate -provider-name restapi
 
 var version = "dev"
 
