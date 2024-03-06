@@ -9,7 +9,7 @@ steps:
   - name: build
     image: docker.io/goreleaser/goreleaser
     commands:
-      - goreleaser build
+      - goreleaser build --snapshot
 
   - name: executable
     image: quay.io/thegeeklab/alpine-tools
@@ -34,4 +34,4 @@ steps:
       - event: [tag]
 
 depends_on:
-  - test
+  - docs

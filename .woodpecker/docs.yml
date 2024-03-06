@@ -37,4 +37,4 @@ steps:
       - git diff --exit-code
 
 depends_on:
-  - build-package
+  - test
