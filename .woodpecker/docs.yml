@@ -24,7 +24,7 @@ steps:
     image: docker.io/lycheeverse/lychee
     group: test
     commands:
-      - lychee --no-progress --format detailed docs/content README.md
+      - lychee --no-progress --format detailed docs/ README.md
 
   - name: generate
     image: quay.io/thegeeklab/alpine-tools
