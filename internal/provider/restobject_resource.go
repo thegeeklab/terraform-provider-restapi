@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"strconv"
 
 	"terraform-provider-restapi/internal/restapi/restclient"
 	"terraform-provider-restapi/internal/restapi/restobject"
@@ -76,8 +77,7 @@ func (r *RestobjectResource) Metadata(
 
 func (r *RestobjectResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	// Consider data sensitive if env variables is set to true.
-	// isDataSensitive, _ := strconv.ParseBool(GetEnvOrDefault("API_DATA_IS_SENSITIVE", "false"))
-	isDataSensitive := false
+	isDataSensitive, _ := strconv.ParseBool(utils.GetEnvOrDefault("RESTAPI_SENSITIVE_DATA", "false"))
 
 	resp.Schema = schema.Schema{
 		Description: "Restapi object resource schema.",

@@ -3,9 +3,11 @@ package provider
 import (
 	"context"
 	"fmt"
+	"strconv"
 
 	"terraform-provider-restapi/internal/restapi/restclient"
 	"terraform-provider-restapi/internal/restapi/restobject"
+	"terraform-provider-restapi/internal/utils"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
@@ -32,8 +34,7 @@ func (d *RestobjectDataSource) Metadata(
 
 func (d *RestobjectDataSource) Schema(_ context.Context, _ datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	// Consider data sensitive if env variables is set to true.
-	// isDataSensitive, _ := strconv.ParseBool(GetEnvOrDefault("API_DATA_IS_SENSITIVE", "false"))
-	isDataSensitive := false
+	isDataSensitive, _ := strconv.ParseBool(utils.GetEnvOrDefault("RESTAPI_SENSITIVE_DATA", "false"))
 
 	resp.Schema = schema.Schema{
 		Description: "Restapi object data source schema.",
