@@ -7,15 +7,15 @@ when:
 
 steps:
   - name: build
-    image: docker.io/techknowlogick/xgo:go-1.22.x
+    image: docker.io/library/golang:1.22
     commands:
-      - ln -s $(pwd) /source
-      - make release
+      - make goreleaser-snapshot
+      - ls -l dist/
 
   - name: executable
-    image: quay.io/thegeeklab/alpine-tools
+    image: docker.io/library/golang:1.22
     commands:
-      - $(find dist/ -executable -type f -iname ${CI_REPO_NAME}-linux-amd64) --help
+      - $(find dist/ -executable -type f -iwholename *${CI_REPO_NAME}_linux_amd64*/${CI_REPO_NAME}*) --help
 
   - name: changelog
     image: quay.io/thegeeklab/git-sv
@@ -25,17 +25,14 @@ steps:
       - cat CHANGELOG.md
 
   - name: publish-github
-    image: docker.io/plugins/github-release
-    settings:
-      api_key:
-        from_secret: github_token
-      files:
-        - dist/*
-      note: CHANGELOG.md
-      overwrite: true
-      title: ${CI_COMMIT_TAG}
+    image: docker.io/goreleaser/goreleaser
+    secrets:
+      - source: github_token
+        target: GITHUB_TOKEN
+    commands:
+      - make goreleaser-release
     when:
       - event: [tag]
 
 depends_on:
-  - test
+  - docs

@@ -6,6 +6,16 @@ when:
       - ${CI_REPO_DEFAULT_BRANCH}
 
 steps:
+  - name: generate
+    image: docker.io/library/golang:1.22
+    commands:
+      - make generate
+
+  - name: check-unchanged
+    image: quay.io/thegeeklab/alpine-tools
+    commands:
+      - git diff --exit-code
+
   - name: markdownlint
     image: quay.io/thegeeklab/markdownlint-cli
     group: test
@@ -26,15 +36,5 @@ steps:
     commands:
       - lychee --no-progress --format detailed docs/ README.md
 
-  - name: generate
-    image: docker.io/library/golang:1.22
-    commands:
-      - make generate
-
-  - name: check-unchanged
-    image: quay.io/thegeeklab/alpine-tools
-    commands:
-      - git diff --exit-code
-
 depends_on:
-  - build-package
+  - test
