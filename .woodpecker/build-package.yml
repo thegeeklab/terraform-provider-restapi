@@ -11,13 +11,14 @@ steps:
     commands:
       - make goreleaser-snapshot
       - ls -l dist/
-    when:
+    when: &when-dryrun
       - event: [pull_request, push, manual]
 
   - name: executable
     image: docker.io/library/golang:1.22
     commands:
       - $(find dist/ -executable -type f -iwholename *${CI_REPO_NAME}_linux_amd64*/${CI_REPO_NAME}*) --help
+    when: *when-dryrun
 
   - name: changelog
     image: quay.io/thegeeklab/git-sv
