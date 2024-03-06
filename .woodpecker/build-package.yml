@@ -9,7 +9,7 @@ steps:
   - name: build
     image: docker.io/library/golang:1.22
     commands:
-      - goreleaser build --snapshot
+      - make goreleaser-snapshot
       - ls -l dist/
 
   - name: executable
@@ -30,7 +30,7 @@ steps:
       - source: github_token
         target: GITHUB_TOKEN
     commands:
-      - goreleaser release --release-notes=CHANGELOG.md
+      - make goreleaser-release
     when:
       - event: [tag]
 
