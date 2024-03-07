@@ -1,5 +1,5 @@
 terraform-provider-restapi
-restapi
+(R|r)estapi
 restapi_object
 m?TLS
 OAuth
