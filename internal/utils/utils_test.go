@@ -66,32 +66,22 @@ func TestGetObjectAtKey(t *testing.T) {
 		wantErr error
 	}{
 		{
-			name: "valid nested key",
-			data: MapAny{
-				"foo": MapAny{
-					"bar": "baz",
-				},
-			},
+			name:    "valid nested key",
+			data:    MapAny{"foo": MapAny{"bar": "baz"}},
 			key:     "foo/bar",
 			want:    "baz",
 			wantErr: nil,
 		},
 		{
-			name: "valid direct key",
-			data: MapAny{
-				"a": 123,
-			},
+			name:    "valid direct key",
+			data:    MapAny{"a": 123},
 			key:     "a",
 			want:    123,
 			wantErr: nil,
 		},
 		{
-			name: "valid nested slice",
-			data: MapAny{
-				"foo": MapAny{
-					"bar": []any{1, "2", 3},
-				},
-			},
+			name:    "valid nested slice",
+			data:    MapAny{"foo": MapAny{"bar": []any{1, "2", 3}}},
 			key:     "foo/bar/1",
 			want:    "2",
 			wantErr: nil,
@@ -104,32 +94,22 @@ func TestGetObjectAtKey(t *testing.T) {
 			wantErr: ErrObjectKeyNotFound,
 		},
 		{
-			name: "invalid object type",
-			data: MapAny{
-				"foo": "bar",
-			},
+			name:    "invalid object type",
+			data:    MapAny{"foo": "bar"},
 			key:     "foo/baz",
 			want:    nil,
 			wantErr: ErrInvalidObjectType,
 		},
 		{
-			name: "key not found in object",
-			data: MapAny{
-				"foo": MapAny{
-					"bar": "baz",
-				},
-			},
+			name:    "key not found in object",
+			data:    MapAny{"foo": MapAny{"bar": "baz"}},
 			key:     "foo/baz",
 			want:    nil,
 			wantErr: ErrObjectKeyNotFound,
 		},
 		{
-			name: "unsaitized path",
-			data: MapAny{
-				"foo": MapAny{
-					"bar": "baz",
-				},
-			},
+			name:    "unsaitized path",
+			data:    MapAny{"foo": MapAny{"bar": "baz"}},
 			key:     "//foo/////bar///",
 			want:    "baz",
 			wantErr: nil,
