@@ -168,3 +168,30 @@ func ParseImportPath(id string) (string, string, error) {
 
 	return id, path, nil
 }
+
+// IntersectMaps takes two maps and returns a new map containing only the
+// keys and values that exist in both input maps. For keys that exist in
+// both maps but have different value types, the value from map2 is used.
+// Nested maps are intersected recursively.
+func IntersectMaps(map1, map2 map[string]any) map[string]any {
+	result := make(map[string]any)
+
+	for k, v := range map1 {
+		v2, ok := map2[k]
+		if ok {
+			vMap, vMapOk := v.(map[string]any)
+			v2Map, v2MapOk := v2.(map[string]any)
+
+			switch {
+			case vMapOk && v2MapOk:
+				result[k] = IntersectMaps(vMap, v2Map)
+			case vMapOk:
+				result[k] = v
+			default:
+				result[k] = v2
+			}
+		}
+	}
+
+	return result
+}

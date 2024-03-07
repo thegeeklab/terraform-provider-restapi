@@ -280,7 +280,7 @@ func (p *RestapiProvider) Configure(
 	}
 
 	if !(data.CopyKeys.IsNull() || data.CopyKeys.IsUnknown()) {
-		resp.Diagnostics.Append(data.CopyKeys.ElementsAs(ctx, clientOpts.CopyKeys, false)...)
+		resp.Diagnostics.Append(data.CopyKeys.ElementsAs(ctx, &clientOpts.CopyKeys, false)...)
 	}
 
 	if !(data.WriteReturnsObject.IsNull() || data.WriteReturnsObject.IsUnknown()) {

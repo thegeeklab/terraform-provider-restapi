@@ -1,13 +1,16 @@
 package utils
 
 import (
+	"reflect"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
 
+type MapAny = map[string]any
+
 func TestGetStringAtKey(t *testing.T) {
-	data := map[string]any{
+	data := MapAny{
 		"foo":  "bar",
 		"baz":  123,
 		"bool": true,
@@ -57,15 +60,15 @@ func TestGetStringAtKey(t *testing.T) {
 func TestGetObjectAtKey(t *testing.T) {
 	tests := []struct {
 		name    string
-		data    map[string]any
+		data    MapAny
 		key     string
 		want    any
 		wantErr error
 	}{
 		{
 			name: "valid nested key",
-			data: map[string]any{
-				"foo": map[string]any{
+			data: MapAny{
+				"foo": MapAny{
 					"bar": "baz",
 				},
 			},
@@ -75,7 +78,7 @@ func TestGetObjectAtKey(t *testing.T) {
 		},
 		{
 			name: "valid direct key",
-			data: map[string]any{
+			data: MapAny{
 				"a": 123,
 			},
 			key:     "a",
@@ -84,8 +87,8 @@ func TestGetObjectAtKey(t *testing.T) {
 		},
 		{
 			name: "valid nested slice",
-			data: map[string]any{
-				"foo": map[string]any{
+			data: MapAny{
+				"foo": MapAny{
 					"bar": []any{1, "2", 3},
 				},
 			},
@@ -95,14 +98,14 @@ func TestGetObjectAtKey(t *testing.T) {
 		},
 		{
 			name:    "key not found",
-			data:    map[string]any{},
+			data:    MapAny{},
 			key:     "invalid",
 			want:    nil,
 			wantErr: ErrObjectKeyNotFound,
 		},
 		{
 			name: "invalid object type",
-			data: map[string]any{
+			data: MapAny{
 				"foo": "bar",
 			},
 			key:     "foo/baz",
@@ -111,8 +114,8 @@ func TestGetObjectAtKey(t *testing.T) {
 		},
 		{
 			name: "key not found in object",
-			data: map[string]any{
-				"foo": map[string]any{
+			data: MapAny{
+				"foo": MapAny{
 					"bar": "baz",
 				},
 			},
@@ -122,8 +125,8 @@ func TestGetObjectAtKey(t *testing.T) {
 		},
 		{
 			name: "unsaitized path",
-			data: map[string]any{
-				"foo": map[string]any{
+			data: MapAny{
+				"foo": MapAny{
 					"bar": "baz",
 				},
 			},
@@ -149,7 +152,7 @@ func TestGetObjectAtKey(t *testing.T) {
 }
 
 func TestGetKeys(t *testing.T) {
-	data := map[string]any{
+	data := MapAny{
 		"foo": "bar",
 		"baz": 123,
 	}
@@ -171,22 +174,22 @@ func TestGetEnvOrDefault(t *testing.T) {
 func TestGetRequestData(t *testing.T) {
 	tests := []struct {
 		name      string
-		data      map[string]any
-		overwrite map[string]any
+		data      MapAny
+		overwrite MapAny
 		expected  string
 		wantErr   error
 	}{
 		{
 			name:      "valid data",
-			data:      map[string]any{"name": "test"},
+			data:      MapAny{"name": "test"},
 			overwrite: nil,
 			expected:  `{"name":"test"}`,
 			wantErr:   nil,
 		},
 		{
 			name:      "overwrite data",
-			data:      map[string]any{"name": "test"},
-			overwrite: map[string]any{"name": "overwrite"},
+			data:      MapAny{"name": "test"},
+			overwrite: MapAny{"name": "overwrite"},
 			expected:  `{"name":"overwrite"}`,
 			wantErr:   nil,
 		},
@@ -199,14 +202,14 @@ func TestGetRequestData(t *testing.T) {
 		},
 		{
 			name:      "empty map",
-			data:      make(map[string]any),
+			data:      make(MapAny),
 			overwrite: nil,
 			expected:  "{}",
 			wantErr:   nil,
 		},
 		{
 			name:      "marshal error",
-			data:      map[string]any{"name": make(chan int)},
+			data:      MapAny{"name": make(chan int)},
 			overwrite: nil,
 			expected:  "",
 			wantErr:   ErrJSONMarshal,
@@ -269,6 +272,62 @@ func TestParseImportPath(t *testing.T) {
 			assert.NoError(t, err)
 			assert.Equal(t, tt.wantID, gotID)
 			assert.Equal(t, tt.wantPath, gotN)
+		})
+	}
+}
+
+func TestIntersectMaps(t *testing.T) {
+	testCases := []struct {
+		name     string
+		map1     MapAny
+		map2     MapAny
+		expected MapAny
+	}{
+		{
+			name:     "both maps empty",
+			map1:     MapAny{},
+			map2:     MapAny{},
+			expected: MapAny{},
+		},
+		{
+			name:     "one map empty",
+			map1:     MapAny{"key1": "value1", "key2": "value2"},
+			map2:     MapAny{},
+			expected: MapAny{},
+		},
+		{
+			name:     "no intersection",
+			map1:     MapAny{"key1": "value1", "key2": "value2"},
+			map2:     MapAny{"key3": "value3", "key4": "value4"},
+			expected: MapAny{},
+		},
+		{
+			name:     "partial intersection",
+			map1:     MapAny{"key1": "value1", "key2": "value2"},
+			map2:     MapAny{"key2": "value2", "key3": "value3"},
+			expected: MapAny{"key2": "value2"},
+		},
+		{
+			name:     "intersection with more types",
+			map1:     MapAny{"key1": 2, "key2": true},
+			map2:     MapAny{"key1": 1, "key2": false},
+			expected: MapAny{"key1": 1, "key2": false},
+		},
+		{
+			name:     "intersection nested",
+			map1:     MapAny{"outside": MapAny{"change": "a"}, "out": "x"},
+			map2:     MapAny{"outside": MapAny{"change": "b", "add": []string{}}},
+			expected: MapAny{"outside": MapAny{"change": "b"}},
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			result := IntersectMaps(tc.map1, tc.map2)
+
+			if !reflect.DeepEqual(result, tc.expected) {
+				t.Errorf("expected %v but got %v", tc.expected, result)
+			}
 		})
 	}
 }

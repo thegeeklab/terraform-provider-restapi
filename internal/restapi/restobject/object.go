@@ -185,15 +185,30 @@ func (ro *RestObject) setData(ctx context.Context, state string) error {
 		tflog.Debug(ctx, fmt.Sprintf("not updating id as already set: '%s'", opts.ID))
 	}
 
-	// Any keys that come from the data we want to copy are done here
-	for _, key := range ro.client.Options.CopyKeys {
-		tflog.Debug(ctx, fmt.Sprintf("copy key '%s' from api_response (%v) to data (%v)",
-			key, opts.APIResponse[key], opts.Data[key]))
+	if opts.Data == nil {
+		tflog.Debug(ctx, fmt.Sprintf("final object after data sync: %+v", ro.ToString()))
 
-		opts.Data[key] = opts.APIResponse[key]
+		return nil
 	}
 
-	tflog.Debug(ctx, fmt.Sprintf("final object after synchronization of the data: %+v", ro.ToString()))
+	if len(ro.client.Options.CopyKeys) > 0 {
+		// Any keys that come from the data we want to copy are done here
+		for _, key := range ro.client.Options.CopyKeys {
+			tflog.Debug(ctx, fmt.Sprintf("copy key '%s' from api_response (%v) to data (%v)",
+				key, opts.APIResponse[key], opts.Data[key]))
+
+			opts.Data[key] = opts.APIResponse[key]
+		}
+	} else {
+		for key, value := range utils.IntersectMaps(opts.Data, opts.APIResponse) {
+			tflog.Debug(ctx, fmt.Sprintf("copy key '%s' from api_response (%v) to data (%v)",
+				key, value, opts.Data[key]))
+
+			opts.Data[key] = value
+		}
+	}
+
+	tflog.Debug(ctx, fmt.Sprintf("final object after data sync: %+v", ro.ToString()))
 
 	return err
 }
