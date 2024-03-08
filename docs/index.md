@@ -39,10 +39,11 @@ provider "restapi" {
 
 - `cert_file` (String) Client certificate file used for mTLS authentication.
 - `cert_string` (String) Client certificate string used for mTLS authentication.
-- `copy_keys` (List of String) Keys to copy from the API response to the `data` attribute. This is useful if internal API information also needs to be provided for updates, e.g. the revision of the object.
+- `copy_keys` (List of String) Keys to copy from the API response to the `data` attribute. This is useful if internal API information also needs to be provided for updates, e.g. the revision of the object. Deactivates `drift_detection` implicitly.
 - `create_method` (String) Defaults to `POST`. The HTTP method used to CREATE objects of this type on the API server.
 - `create_returns_object` (Boolean) Enable it if the API returns the created object on creation operations only (`POST`). The returned object is used by the provider to refresh internal data structures.
 - `destroy_method` (String) Defaults to `DELETE`. The HTTP method used to DELETE objects of this type on the API server.
+- `drift_detection` (Boolean) Automatic detection of data drifts in the state. If activated, all keys in the `data` attribute are searched for in the `api_response`. If the attributes are found and the values differ from the current information in the `data` attribute, these are updated automatically. Defaults to `true`.
 - `headers` (Map of String) A mapping of header names and values to be set on all outgoing requests. This is useful if you want to use a script via the `external` provider or provide an approved token or change the default Content-Type from `application/json`. If username` and `password` are set and Authorization is one of the headers defined here, the basic authentication data will take precedence.
 - `id_attribute` (String) If this option is set, it is used for editing REST objects. For example, if the ID is set to `name`, changes to the API object are made to `http://example.com/api/<value_of_name>`. This value can also be a path to the ID attribute delimited by '/' if it is several levels deep in the data, e.g. `attributes/id` in the case of an object `{ "attributes": { "id": 1234 }, "config": { "name": "foo", "something": "bar"}}`.
 - `insecure` (Boolean) When using HTTPS, this disables TLS verification of the host.

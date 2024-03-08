@@ -199,7 +199,7 @@ func (ro *RestObject) setData(ctx context.Context, state string) error {
 
 			opts.Data[key] = opts.APIResponse[key]
 		}
-	} else {
+	} else if ro.client.Options.DriftDetection {
 		for key, value := range utils.IntersectMaps(opts.Data, opts.APIResponse) {
 			tflog.Debug(ctx, fmt.Sprintf("copy key '%s' from api_response (%v) to data (%v)",
 				key, value, opts.Data[key]))
