@@ -40,6 +40,7 @@ type ClientOptions struct {
 	UpdateMethod           string
 	DestroyMethod          string
 	CopyKeys               []string
+	DriftDetection         bool
 	WriteReturnsObject     bool
 	CreateReturnsObject    bool
 	XSSIPrefix             string

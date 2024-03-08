@@ -40,6 +40,7 @@ type RestapiProviderModel struct {
 	UpdateMethod           types.String  `tfsdk:"update_method"`
 	DestroyMethod          types.String  `tfsdk:"destroy_method"`
 	CopyKeys               types.List    `tfsdk:"copy_keys"`
+	DriftDetection         types.Bool    `tfsdk:"drift_detection"`
 	WriteReturnsObject     types.Bool    `tfsdk:"write_returns_object"`
 	CreateReturnsObject    types.Bool    `tfsdk:"create_returns_object"`
 	XSSIPrefix             types.String  `tfsdk:"xssi_prefix"`
@@ -132,7 +133,14 @@ func (p *RestapiProvider) Schema(_ context.Context, _ provider.SchemaRequest, re
 				Optional:    true,
 				Description: "Keys to copy from the API response to the `data` attribute. " +
 					"This is useful if internal API information also needs to be provided for updates, " +
-					"e.g. the revision of the object.",
+					"e.g. the revision of the object. Deactivates `drift_detection` implicitly.",
+			},
+			"drift_detection": schema.BoolAttribute{
+				Optional: true,
+				Description: "Automatic detection of data drifts in the state. If activated, " +
+					"all keys in the `data` attribute are searched for in the `api_response`. If the attributes " +
+					"are found and the values differ from the current information in the `data` attribute, " +
+					"these are updated automatically. Defaults to `true`.",
 			},
 			"write_returns_object": schema.BoolAttribute{
 				Optional: true,
@@ -280,7 +288,12 @@ func (p *RestapiProvider) Configure(
 	}
 
 	if !(data.CopyKeys.IsNull() || data.CopyKeys.IsUnknown()) {
-		resp.Diagnostics.Append(data.CopyKeys.ElementsAs(ctx, clientOpts.CopyKeys, false)...)
+		resp.Diagnostics.Append(data.CopyKeys.ElementsAs(ctx, &clientOpts.CopyKeys, false)...)
+	}
+
+	clientOpts.DriftDetection = true
+	if !(data.DriftDetection.IsNull() || data.DriftDetection.IsUnknown()) {
+		clientOpts.DriftDetection = data.DriftDetection.ValueBool()
 	}
 
 	if !(data.WriteReturnsObject.IsNull() || data.WriteReturnsObject.IsUnknown()) {
