@@ -40,6 +40,7 @@ type ClientOptions struct {
 	UpdateMethod           string
 	DestroyMethod          string
 	CopyKeys               []string
+	ResponseFilter         *ResponseFilter
 	DriftDetection         bool
 	WriteReturnsObject     bool
 	CreateReturnsObject    bool
@@ -59,6 +60,11 @@ type OAuthCredentials struct {
 	TokenEndpoint  string
 	EndpointParams url.Values
 	Scopes         []string
+}
+
+type ResponseFilter struct {
+	Keys    []string
+	Include bool
 }
 
 // RestClient is a HTTP client with additional controlling fields.
@@ -107,6 +113,10 @@ func New(ctx context.Context, opts *ClientOptions) (*RestClient, error) {
 
 	if opts.OAuthClientCredentials == nil {
 		opts.OAuthClientCredentials = &OAuthCredentials{}
+	}
+
+	if opts.ResponseFilter == nil {
+		opts.ResponseFilter = &ResponseFilter{}
 	}
 
 	tlsConfig := &tls.Config{

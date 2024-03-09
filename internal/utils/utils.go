@@ -195,3 +195,40 @@ func IntersectMaps(map1, map2 map[string]any) map[string]any {
 
 	return result
 }
+
+// FilterJSONString filters keys from a JSON string. It takes a JSON string, a
+// list of keys to filter, and a boolean indicating whether to include or
+// exclude those keys. It returns the filtered JSON object, the filtered JSON
+// string, and any error.
+func FilterJSONString(data string, keys []string, include bool) (map[string]any, string, error) {
+	m := make(map[string]any, 0)
+	result := make(map[string]any, 0)
+
+	err := json.Unmarshal([]byte(data), &m)
+	if err != nil {
+		return result, "", err
+	}
+
+	for _, key := range keys {
+		if include {
+			if _, ok := m[key]; ok {
+				result[key] = m[key]
+			}
+		} else {
+			result = m
+
+			delete(result, key)
+		}
+	}
+
+	if len(keys) == 0 {
+		result = m
+	}
+
+	resultStr, err := json.Marshal(result)
+	if err != nil {
+		return result, "", err
+	}
+
+	return result, string(resultStr), nil
+}

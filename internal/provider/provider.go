@@ -40,6 +40,7 @@ type RestapiProviderModel struct {
 	UpdateMethod           types.String  `tfsdk:"update_method"`
 	DestroyMethod          types.String  `tfsdk:"destroy_method"`
 	CopyKeys               types.List    `tfsdk:"copy_keys"`
+	ResponseFilter         types.Object  `tfsdk:"response_filter"`
 	DriftDetection         types.Bool    `tfsdk:"drift_detection"`
 	WriteReturnsObject     types.Bool    `tfsdk:"write_returns_object"`
 	CreateReturnsObject    types.Bool    `tfsdk:"create_returns_object"`
@@ -59,6 +60,11 @@ type OAuthClientCredentials struct {
 	TokenEndpoint  types.String `tfsdk:"token_endpoint"`
 	EndpointParams types.Map    `tfsdk:"endpoint_params"`
 	Scopes         types.List   `tfsdk:"scopes"`
+}
+
+type ResponseFilter struct {
+	Keys    types.List `tfsdk:"keys"`
+	Include types.Bool `tfsdk:"include"`
 }
 
 func (p *RestapiProvider) Metadata(_ context.Context, _ provider.MetadataRequest, resp *provider.MetadataResponse) {
@@ -134,6 +140,22 @@ func (p *RestapiProvider) Schema(_ context.Context, _ provider.SchemaRequest, re
 				Description: "Keys to copy from the API response to the `data` attribute. " +
 					"This is useful if internal API information also needs to be provided for updates, " +
 					"e.g. the revision of the object. Deactivates `drift_detection` implicitly.",
+			},
+			"response_filter": schema.SingleNestedAttribute{
+				Description: "Filter configuration for the API response.",
+				Optional:    true,
+				Attributes: map[string]schema.Attribute{
+					"keys": schema.ListAttribute{
+						ElementType: types.StringType,
+						Description: "List of top-level keys (nested keys are not supported) to be used for filtering.",
+						Required:    true,
+					},
+					"include": schema.BoolAttribute{
+						Description: "By default, the given `keys` are excluded from the API response. " +
+							"This flag can be set to `true` if the `keys` should be used as include filter instead.",
+						Optional: true,
+					},
+				},
 			},
 			"drift_detection": schema.BoolAttribute{
 				Optional: true,
@@ -225,7 +247,7 @@ func (p *RestapiProvider) Schema(_ context.Context, _ provider.SchemaRequest, re
 	}
 }
 
-//nolint:gocyclo,gocognit
+//nolint:gocyclo,gocognit,maintidx
 func (p *RestapiProvider) Configure(
 	ctx context.Context, req provider.ConfigureRequest, resp *provider.ConfigureResponse,
 ) {
@@ -237,7 +259,10 @@ func (p *RestapiProvider) Configure(
 		return
 	}
 
+	respFilter := &ResponseFilter{}
+
 	clientOpts := &restclient.ClientOptions{}
+	clientOpts.ResponseFilter = &restclient.ResponseFilter{}
 
 	if !(data.Endpoint.IsNull() || data.Endpoint.IsUnknown()) {
 		clientOpts.Endpoint = data.Endpoint.ValueString()
@@ -289,6 +314,19 @@ func (p *RestapiProvider) Configure(
 
 	if !(data.CopyKeys.IsNull() || data.CopyKeys.IsUnknown()) {
 		resp.Diagnostics.Append(data.CopyKeys.ElementsAs(ctx, &clientOpts.CopyKeys, false)...)
+	}
+
+	if !(data.ResponseFilter.IsNull() || data.ResponseFilter.IsUnknown()) {
+		asOpts := basetypes.ObjectAsOptions{UnhandledNullAsEmpty: true, UnhandledUnknownAsEmpty: true}
+		resp.Diagnostics.Append(data.ResponseFilter.As(ctx, respFilter, asOpts)...)
+	}
+
+	if !(respFilter.Keys.IsNull() || respFilter.Keys.IsUnknown()) {
+		resp.Diagnostics.Append(respFilter.Keys.ElementsAs(ctx, &clientOpts.ResponseFilter.Keys, false)...)
+	}
+
+	if !(respFilter.Include.IsNull() || respFilter.Include.IsUnknown()) {
+		clientOpts.ResponseFilter.Include = respFilter.Include.ValueBool()
 	}
 
 	clientOpts.DriftDetection = true

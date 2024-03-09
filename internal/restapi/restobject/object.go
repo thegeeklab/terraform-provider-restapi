@@ -3,7 +3,6 @@ package restobject
 import (
 	"bytes"
 	"context"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"path/filepath"
@@ -160,17 +159,18 @@ func (ro *RestObject) ToString() string {
 // It extracts the ID if not already set, copies configured keys from the
 // API response to the data, and stores the raw API response.
 func (ro *RestObject) setData(ctx context.Context, state string) error {
+	var err error
+
 	opts := ro.Options
 
 	tflog.Debug(ctx, fmt.Sprintf("update api object data: '%s'", state))
 
-	err := json.Unmarshal([]byte(state), &opts.APIResponse)
+	// Store filtered response body.
+	opts.APIResponse, opts.APIResponseRaw, err = utils.FilterJSONString(
+		state, ro.client.Options.ResponseFilter.Keys, ro.client.Options.ResponseFilter.Include)
 	if err != nil {
 		return err
 	}
-
-	// Store response body for parsing via jsondecode().
-	opts.APIResponseRaw = state
 
 	// A usable ID was not passed (in constructor or here),
 	// so we have to guess what it is from the data structure.
