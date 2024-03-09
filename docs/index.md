@@ -53,6 +53,7 @@ provider "restapi" {
 - `password` (String, Sensitive) When set, will use this password for basic authentication to the API.
 - `rate_limit` (Number) Limits the number of requests per second sent to the API.
 - `read_method` (String) Defaults to `GET`. The HTTP method used to READ objects of this type on the API server.
+- `response_filter` (Attributes) Filter configuration for the API response. (see [below for nested schema](#nestedatt--response_filter))
 - `test_path` (String) If this option is set, the provider will send a `read_method` request to this path after instantiation and require a `200 OK` response before proceeding. This is useful if your API provides a no-op endpoint that can signal whether this provider is configured correctly. The response data is ignored.
 - `timeout` (Number) When set, will cause requests taking longer than this time (in seconds) to be aborted.
 - `update_method` (String) Defaults to `PUT`. The HTTP method used to UPDATE objects of this type on the API server.
@@ -74,3 +75,15 @@ Optional:
 
 - `endpoint_params` (Map of List of String) Additional key/values to pass to the OAuth client library as `EndpointParams`
 - `scopes` (List of String) Scopes
+
+
+<a id="nestedatt--response_filter"></a>
+### Nested Schema for `response_filter`
+
+Required:
+
+- `keys` (List of String) List of top-level keys (nested keys are not supported) to be used for filtering.
+
+Optional:
+
+- `include` (Boolean) By default, the given `keys` are excluded from the API response. This flag can be set to `true` if the `keys` should be used as include filter instead.
