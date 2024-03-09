@@ -301,13 +301,91 @@ func TestIntersectMaps(t *testing.T) {
 		},
 	}
 
-	for _, tc := range testCases {
-		t.Run(tc.name, func(t *testing.T) {
-			result := IntersectMaps(tc.map1, tc.map2)
+	for _, tt := range testCases {
+		t.Run(tt.name, func(t *testing.T) {
+			result := IntersectMaps(tt.map1, tt.map2)
 
-			if !reflect.DeepEqual(result, tc.expected) {
-				t.Errorf("expected %v but got %v", tc.expected, result)
+			if !reflect.DeepEqual(result, tt.expected) {
+				t.Errorf("expected %v but got %v", tt.expected, result)
 			}
+		})
+	}
+}
+
+func TestFilterJSONString(t *testing.T) {
+	testCase := []struct {
+		name     string
+		data     string
+		keys     []string
+		include  bool
+		wantMap  map[string]any
+		wantJSON string
+		wantErr  error
+	}{
+		{
+			name:     "no keys",
+			data:     `{"foo": "bar", "baz": 123}`,
+			keys:     []string{},
+			include:  false,
+			wantMap:  map[string]any{"foo": "bar", "baz": float64(123)},
+			wantJSON: `{"foo": "bar", "baz": 123}`,
+		},
+		{
+			name:     "filter single key",
+			data:     `{"foo": "bar", "baz": 123}`,
+			keys:     []string{"baz"},
+			include:  false,
+			wantMap:  map[string]any{"foo": "bar"},
+			wantJSON: `{"foo": "bar"}`,
+		},
+		{
+			name:     "include single key",
+			data:     `{"foo": "bar", "baz": 123}`,
+			keys:     []string{"baz"},
+			include:  true,
+			wantMap:  map[string]any{"baz": float64(123)},
+			wantJSON: `{"baz": 123}`,
+		},
+		{
+			name:     "filter multiple keys",
+			data:     `{"foo": "bar", "baz": 123, "qux": true}`,
+			keys:     []string{"baz", "qux"},
+			include:  false,
+			wantMap:  map[string]any{"foo": "bar"},
+			wantJSON: `{"foo": "bar"}`,
+		},
+		{
+			name:     "include multiple keys",
+			data:     `{"foo": "bar", "baz": 123, "qux": true}`,
+			keys:     []string{"baz", "qux"},
+			include:  true,
+			wantMap:  map[string]any{"baz": float64(123), "qux": true},
+			wantJSON: `{"baz": 123 , "qux": true}`,
+		},
+		{
+			name:     "invalid JSON",
+			data:     `{foo:}`,
+			keys:     []string{"foo"},
+			include:  false,
+			wantMap:  nil,
+			wantJSON: "",
+			wantErr:  assert.AnError,
+		},
+	}
+
+	for _, tt := range testCase {
+		t.Run(tt.name, func(t *testing.T) {
+			gotMap, gotJSON, err := FilterJSONString(tt.data, tt.keys, tt.include)
+
+			if tt.wantErr != nil {
+				assert.Error(t, err, tt.wantErr)
+
+				return
+			}
+
+			assert.NoError(t, err)
+			assert.Equal(t, tt.wantMap, gotMap)
+			assert.JSONEq(t, tt.wantJSON, gotJSON)
 		})
 	}
 }
