@@ -115,6 +115,10 @@ func New(ctx context.Context, opts *ClientOptions) (*RestClient, error) {
 		opts.OAuthClientCredentials = &OAuthCredentials{}
 	}
 
+	if opts.ResponseFilter == nil {
+		opts.ResponseFilter = &ResponseFilter{}
+	}
+
 	tlsConfig := &tls.Config{
 		// Disable TLS verification if requested
 		//nolint:gosec
