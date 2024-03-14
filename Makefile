@@ -100,11 +100,7 @@ release: goreleaser
 
 .PHONY: goreleaser
 goreleaser:
-	$(GO) run $(GORELEASER_PACKAGE) release --clean
-
-.PHONY: goreleaser-snapshot
-goreleaser-snapshot:
-	$(GO) run $(GORELEASER_PACKAGE) release --clean --snapshot
+	$(GO) run $(GORELEASER_PACKAGE) release --clean --skip=validate
 
 .PHONY: deps
 deps:
