@@ -31,7 +31,7 @@ TARGETARCH ?= amd64
 ifneq ("$(TARGETVARIANT)","")
 GOARM ?= $(subst v,,$(TARGETVARIANT))
 endif
-TAGS ?= netgo,osusergo
+TAGS ?= netgo
 
 ifndef VERSION
 	ifneq ($(CI_COMMIT_TAG),)
@@ -45,7 +45,7 @@ ifndef DATE
 	DATE := $(shell date -u +"%Y-%m-%dT%H:%M:%S%z")
 endif
 
-LDFLAGS += -s -w -X "main.BuildVersion=$(VERSION)" -X "main.BuildDate=$(DATE)"
+LDFLAGS += -s -w -X "main.version=$(VERSION)"
 
 .PHONY: all
 all: clean build
