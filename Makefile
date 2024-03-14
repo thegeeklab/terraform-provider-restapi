@@ -31,7 +31,7 @@ TARGETARCH ?= amd64
 ifneq ("$(TARGETVARIANT)","")
 GOARM ?= $(subst v,,$(TARGETVARIANT))
 endif
-TAGS ?= netgo,osusergo
+TAGS ?= netgo
 
 ifndef VERSION
 	ifneq ($(CI_COMMIT_TAG),)
@@ -45,7 +45,7 @@ ifndef DATE
 	DATE := $(shell date -u +"%Y-%m-%dT%H:%M:%S%z")
 endif
 
-LDFLAGS += -s -w -X "main.BuildVersion=$(VERSION)" -X "main.BuildDate=$(DATE)"
+LDFLAGS += -s -w -X "main.version=$(VERSION)"
 
 .PHONY: all
 all: clean build
@@ -96,15 +96,11 @@ checksum:
 	ls -l $(CWD)/$(DIST)
 
 .PHONY: release
-release: xgo checksum
+release: goreleaser
 
-.PHONY: goreleaser-release
-goreleaser-release:
-	$(GO) run $(GORELEASER_PACKAGE) release --clean --release-notes=CHANGELOG.md
-
-.PHONY: goreleaser-snapshot
-goreleaser-snapshot:
-	$(GO) run $(GORELEASER_PACKAGE) build --clean --snapshot
+.PHONY: goreleaser
+goreleaser:
+	$(GO) run $(GORELEASER_PACKAGE) release --clean --skip=validate
 
 .PHONY: deps
 deps:
