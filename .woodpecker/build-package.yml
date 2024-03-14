@@ -23,6 +23,12 @@ steps:
       - git sv release-notes -t ${CI_COMMIT_TAG:-next} -o CHANGELOG.md
       - cat CHANGELOG.md
 
+  - name: terraform-manifest
+    image: quay.io/thegeeklab/alpine-tools
+    commands:
+      - mv terraform-registry-manifest.json ${CI_REPO_NAME}_$$(jq -r '.version' dist/metadata.json)_manifest.json
+      - ls -l ${CI_REPO_NAME}_$$(jq -r '.version' dist/metadata.json)_manifest.json
+
   - name: gpgsign
     image: quay.io/thegeeklab/wp-gpgsign
     settings:
