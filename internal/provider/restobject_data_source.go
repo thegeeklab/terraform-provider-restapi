@@ -39,7 +39,6 @@ func (d *RestobjectDataSource) Schema(_ context.Context, _ datasource.SchemaRequ
 	resp.Schema = schema.Schema{
 		Description: "Restapi object data source schema.",
 
-		//nolint:goconst
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
 				Description: "Internal resource ID.",
