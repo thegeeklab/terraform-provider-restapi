@@ -3,7 +3,7 @@ GOFUMPT_PACKAGE_VERSION := v0.6.0
 # renovate: datasource=github-releases depName=golangci/golangci-lint
 GOLANGCI_LINT_PACKAGE_VERSION := v1.57.2
 # renovate: datasource=github-releases depName=goreleaser/goreleaser
-GORELEASER_PACKAGE_VERSION := v1.25.0
+GORELEASER_PACKAGE_VERSION := v1.25.1
 
 EXECUTABLE := terraform-provider-restapi
 
