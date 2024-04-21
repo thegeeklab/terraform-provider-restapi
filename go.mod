@@ -2,7 +2,7 @@ module terraform-provider-restapi
 
 go 1.22
 
-toolchain go1.22.0
+toolchain go1.22.2
 
 require (
 	github.com/davecgh/go-spew v1.1.1
