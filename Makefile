@@ -3,7 +3,7 @@ GOFUMPT_PACKAGE_VERSION := v0.6.0
 # renovate: datasource=github-releases depName=golangci/golangci-lint
 GOLANGCI_LINT_PACKAGE_VERSION := v1.59.0
 # renovate: datasource=github-releases depName=goreleaser/goreleaser
-GORELEASER_PACKAGE_VERSION := v1.26.2
+GORELEASER_PACKAGE_VERSION := v2.0.0
 
 EXECUTABLE := terraform-provider-restapi
 
@@ -20,7 +20,7 @@ GOFUMPT_PACKAGE ?= mvdan.cc/gofumpt@$(GOFUMPT_PACKAGE_VERSION)
 GOLANGCI_LINT_PACKAGE ?= github.com/golangci/golangci-lint/cmd/golangci-lint@$(GOLANGCI_LINT_PACKAGE_VERSION)
 XGO_PACKAGE ?= src.techknowlogick.com/xgo@latest
 GOTESTSUM_PACKAGE ?= gotest.tools/gotestsum@latest
-GORELEASER_PACKAGE ?= github.com/goreleaser/goreleaser@$(GORELEASER_PACKAGE_VERSION)
+GORELEASER_PACKAGE ?= github.com/goreleaser/goreleaser/v2@$(GORELEASER_PACKAGE_VERSION)
 
 GENERATE ?=
 XGO_VERSION := go-1.22.x
