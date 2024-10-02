@@ -4,6 +4,8 @@ GOFUMPT_PACKAGE_VERSION := v0.7.0
 GOLANGCI_LINT_PACKAGE_VERSION := v1.61.0
 # renovate: datasource=github-releases depName=goreleaser/goreleaser
 GORELEASER_PACKAGE_VERSION := v2.3.2
+# renovate: datasource=docker depName=docker.io/techknowlogick/xgo
+XGO_PACKAGE_VERSION := go-1.22.x
 
 EXECUTABLE := terraform-provider-restapi
 
@@ -23,7 +25,6 @@ GOTESTSUM_PACKAGE ?= gotest.tools/gotestsum@latest
 GORELEASER_PACKAGE ?= github.com/goreleaser/goreleaser/v2@$(GORELEASER_PACKAGE_VERSION)
 
 GENERATE ?=
-XGO_VERSION := go-1.22.x
 XGO_TARGETS ?= linux/amd64,linux/arm,linux/arm64,darwin/amd64,darwin/arm64,windows/amd64,windows/arm,windows/arm64
 
 TARGETOS ?= linux
@@ -86,7 +87,7 @@ $(DIST_DIRS):
 
 .PHONY: xgo
 xgo: | $(DIST_DIRS)
-	$(GO) run $(XGO_PACKAGE) -go $(XGO_VERSION) -v -ldflags '-extldflags "-static" $(LDFLAGS)' -tags '$(TAGS)' -targets '$(XGO_TARGETS)' -out $(EXECUTABLE) --pkg . .
+	$(GO) run $(XGO_PACKAGE) -go $(XGO_PACKAGE_VERSION) -v -ldflags '-extldflags "-static" $(LDFLAGS)' -tags '$(TAGS)' -targets '$(XGO_TARGETS)' -out $(EXECUTABLE) --pkg . .
 	cp /build/* $(CWD)/$(DIST)
 	ls -l $(CWD)/$(DIST)
 
