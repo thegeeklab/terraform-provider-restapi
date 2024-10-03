@@ -7,8 +7,8 @@ import (
 	"fmt"
 	"path/filepath"
 
-	"terraform-provider-restapi/internal/restapi/restclient"
-	"terraform-provider-restapi/internal/utils"
+	"github.com/thegeeklab/terraform-provider-restapi/internal/restapi/restclient"
+	"github.com/thegeeklab/terraform-provider-restapi/internal/utils"
 
 	"github.com/davecgh/go-spew/spew"
 	"github.com/hashicorp/terraform-plugin-log/tflog"

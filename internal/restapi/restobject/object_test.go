@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"terraform-provider-restapi/internal/restapi/restclient"
+	"github.com/thegeeklab/terraform-provider-restapi/internal/restapi/restclient"
 
 	"github.com/jarcoal/httpmock"
 )

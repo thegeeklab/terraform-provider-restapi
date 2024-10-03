@@ -1,4 +1,4 @@
-module terraform-provider-restapi
+module github.com/thegeeklab/terraform-provider-restapi
 
 go 1.23.2
 

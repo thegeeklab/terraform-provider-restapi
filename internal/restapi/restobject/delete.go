@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"strings"
 
-	"terraform-provider-restapi/internal/utils"
+	"github.com/thegeeklab/terraform-provider-restapi/internal/utils"
 
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )

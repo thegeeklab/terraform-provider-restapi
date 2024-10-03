@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"testing"
 
-	"terraform-provider-restapi/internal/restapi/restclient"
-	"terraform-provider-restapi/internal/testutils"
+	"github.com/thegeeklab/terraform-provider-restapi/internal/restapi/restclient"
+	"github.com/thegeeklab/terraform-provider-restapi/internal/testutils"
 
 	"github.com/jarcoal/httpmock"
 	"github.com/stretchr/testify/assert"

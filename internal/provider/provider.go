@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"net/url"
 
-	"terraform-provider-restapi/internal/restapi/restclient"
+	"github.com/thegeeklab/terraform-provider-restapi/internal/restapi/restclient"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/provider"

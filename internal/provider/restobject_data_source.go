@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"strconv"
 
-	"terraform-provider-restapi/internal/restapi/restclient"
-	"terraform-provider-restapi/internal/restapi/restobject"
-	"terraform-provider-restapi/internal/utils"
+	"github.com/thegeeklab/terraform-provider-restapi/internal/restapi/restclient"
+	"github.com/thegeeklab/terraform-provider-restapi/internal/restapi/restobject"
+	"github.com/thegeeklab/terraform-provider-restapi/internal/utils"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
