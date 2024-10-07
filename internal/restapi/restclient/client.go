@@ -154,7 +154,7 @@ func New(ctx context.Context, opts *ClientOptions) (*RestClient, error) {
 		cookieJar, _ = cookiejar.New(nil)
 	}
 
-	rateLimit := rate.Limit(opts.RateLimit)
+	rateLimit := rate.Limit(math.Max(opts.RateLimit, 1))
 	bucketSize := int(math.Max(math.Round(opts.RateLimit), 1))
 	tflog.Info(ctx, fmt.Sprintf("limit: %f bucket: %d", opts.RateLimit, bucketSize))
 	rateLimiter := rate.NewLimiter(rateLimit, bucketSize)
@@ -248,7 +248,9 @@ func (rc *RestClient) SendRequest(ctx context.Context, method, path, data string
 		// Rate limiting
 		tflog.Debug(ctx, "wait for rate limit availability")
 
-		_ = rc.rateLimiter.Wait(ctx)
+		if err := rc.rateLimiter.Wait(ctx); err != nil {
+			tflog.Warn(ctx, fmt.Sprintf("rate limiter failed: %s", err.Error()))
+		}
 	}
 
 	resp, err := rc.HTTPClient.Do(req)
