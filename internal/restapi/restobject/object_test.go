@@ -1,7 +1,6 @@
 package restobject
 
 import (
-	"context"
 	"encoding/json"
 	"testing"
 
@@ -121,7 +120,7 @@ func newMockClient(t *testing.T, opts *restclient.ClientOptions) *restclient.Res
 		opts.Endpoint = "https://restapi.local/"
 	}
 
-	client, _ := restclient.New(context.Background(), opts)
+	client, _ := restclient.New(t.Context(), opts)
 
 	httpmock.ActivateNonDefault(client.HTTPClient)
 

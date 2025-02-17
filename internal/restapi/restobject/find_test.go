@@ -1,7 +1,6 @@
 package restobject
 
 import (
-	"context"
 	"fmt"
 	"net/http"
 	"testing"
@@ -47,7 +46,7 @@ func TestFind(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			ro, _ := New(client, &ObjectOptions{Path: tt.searchValue})
 
-			got, err := ro.Find(context.Background(), "", tt.searchKey, tt.searchValue, "")
+			got, err := ro.Find(t.Context(), "", tt.searchKey, tt.searchValue, "")
 			if tt.wantErr != nil {
 				assert.ErrorIs(t, err, tt.wantErr)
 
