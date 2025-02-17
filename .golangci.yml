@@ -76,7 +76,7 @@ linters:
     # - structcheck
     - stylecheck
     - tagliatelle
-    - tenv
+    - usetesting
     - testableexamples
     - thelper
     - tparallel
