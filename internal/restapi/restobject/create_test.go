@@ -1,7 +1,6 @@
 package restobject
 
 import (
-	"context"
 	"fmt"
 	"net/http"
 	"testing"
@@ -45,7 +44,7 @@ func TestCreate(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			ro, _ := New(client, &ObjectOptions{ID: tt.key, Path: fmt.Sprintf("/%s", tt.key)})
 
-			err := ro.Create(context.Background())
+			err := ro.Create(t.Context())
 			if tt.wantErr != nil {
 				assert.ErrorIs(t, err, tt.wantErr)
 

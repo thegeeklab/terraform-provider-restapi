@@ -1,7 +1,6 @@
 package restclient
 
 import (
-	"context"
 	"net/http"
 	"testing"
 	"time"
@@ -61,7 +60,7 @@ func TestAPIClient(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			res, _, err := client.SendRequest(context.Background(), "GET", tt.url, "")
+			res, _, err := client.SendRequest(t.Context(), "GET", tt.url, "")
 			if tt.wantErr != nil {
 				assert.ErrorIs(t, err, tt.wantErr)
 
@@ -88,7 +87,7 @@ func TestAPIClientRateLimit(t *testing.T) {
 		startTime := time.Now().Unix()
 
 		for i := 0; i < 4; i++ {
-			client.SendRequest(context.Background(), "GET", "/ok", "")
+			client.SendRequest(t.Context(), "GET", "/ok", "")
 		}
 
 		duration := time.Now().Unix() - startTime
@@ -105,7 +104,7 @@ func newMockClient(t *testing.T, opts *ClientOptions) *RestClient {
 		opts.Endpoint = "https://restapi.local/"
 	}
 
-	client, _ := New(context.Background(), opts)
+	client, _ := New(t.Context(), opts)
 
 	httpmock.ActivateNonDefault(client.HTTPClient)
 

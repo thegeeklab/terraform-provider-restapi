@@ -136,7 +136,7 @@ func getDataArray(result any, resultKey string) ([]any, error) {
 			ErrFindResponse, resultKey)
 	}
 
-	tmp, err = utils.GetObjectAtKey(result.(map[string]any), resultKey)
+	tmp, err = utils.GetObjectAtKey(result.(map[string]any), resultKey) //nolint:forcetypeassert
 	if err != nil {
 		return data, fmt.Errorf("%w: %w: result_key not found", ErrFindResponse, err)
 	}

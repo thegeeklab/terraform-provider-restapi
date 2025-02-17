@@ -1,7 +1,6 @@
 package restobject
 
 import (
-	"context"
 	"net/http"
 	"testing"
 
@@ -87,7 +86,7 @@ func TestRead(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			ro, _ := New(client, tt.opts)
 
-			err := ro.Read(context.Background())
+			err := ro.Read(t.Context())
 			if tt.wantErr != nil {
 				assert.ErrorIs(t, err, tt.wantErr)
 

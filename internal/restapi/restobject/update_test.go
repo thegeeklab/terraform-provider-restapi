@@ -1,7 +1,6 @@
 package restobject
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -55,7 +54,7 @@ func TestUpdate(t *testing.T) {
 			json.Unmarshal([]byte(tt.data), &ro.Options.APIResponse)
 			ro.Options.APIResponse["thing"] = "spoon"
 
-			err := ro.Update(context.Background())
+			err := ro.Update(t.Context())
 			if tt.wantErr != nil {
 				assert.ErrorIs(t, err, tt.wantErr)
 
