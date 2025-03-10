@@ -5,7 +5,7 @@ GOLANGCI_LINT_PACKAGE_VERSION := v1.64.6
 # renovate: datasource=github-releases depName=goreleaser/goreleaser
 GORELEASER_PACKAGE_VERSION := v2.7.0
 # renovate: datasource=docker depName=docker.io/techknowlogick/xgo
-XGO_PACKAGE_VERSION := go-1.24.0
+XGO_PACKAGE_VERSION := go-1.24.1
 
 EXECUTABLE := terraform-provider-restapi
 
