@@ -447,85 +447,85 @@ func toObjectOptions(ctx context.Context, data RestobjectResourceModel) (*restob
 	readSearch := &ReadSearch{}
 	diags := make(diag.Diagnostics, 0)
 
-	if !(data.Path.IsNull() || data.Path.IsUnknown()) {
+	if !data.Path.IsNull() && !data.Path.IsUnknown() {
 		objectOpts.Path = data.Path.ValueString()
 	}
 
-	if !(data.PostPath.IsNull() || data.PostPath.IsUnknown()) {
+	if !data.PostPath.IsNull() && !data.PostPath.IsUnknown() {
 		objectOpts.PostPath = data.PostPath.ValueString()
 	}
 
-	if !(data.GetPath.IsNull() || data.GetPath.IsUnknown()) {
+	if !data.GetPath.IsNull() && !data.GetPath.IsUnknown() {
 		objectOpts.GetPath = data.GetPath.ValueString()
 	}
 
-	if !(data.PutPath.IsNull() || data.PutPath.IsUnknown()) {
+	if !data.PutPath.IsNull() && !data.PutPath.IsUnknown() {
 		objectOpts.PutPath = data.PutPath.ValueString()
 	}
 
-	if !(data.DeletePath.IsNull() || data.DeletePath.IsUnknown()) {
+	if !data.DeletePath.IsNull() && !data.DeletePath.IsUnknown() {
 		objectOpts.DeletePath = data.DeletePath.ValueString()
 	}
 
-	if !(data.CreateMethod.IsNull() || data.CreateMethod.IsUnknown()) {
+	if !data.CreateMethod.IsNull() && !data.CreateMethod.IsUnknown() {
 		objectOpts.CreateMethod = data.CreateMethod.ValueString()
 	}
 
-	if !(data.ReadMethod.IsNull() || data.ReadMethod.IsUnknown()) {
+	if !data.ReadMethod.IsNull() && !data.ReadMethod.IsUnknown() {
 		objectOpts.ReadMethod = data.ReadMethod.ValueString()
 	}
 
-	if !(data.UpdateMethod.IsNull() || data.UpdateMethod.IsUnknown()) {
+	if !data.UpdateMethod.IsNull() && !data.UpdateMethod.IsUnknown() {
 		objectOpts.UpdateMethod = data.UpdateMethod.ValueString()
 	}
 
-	if !(data.DeleteMethod.IsNull() || data.DeleteMethod.IsUnknown()) {
+	if !data.DeleteMethod.IsNull() && !data.DeleteMethod.IsUnknown() {
 		objectOpts.DeleteMethod = data.DeleteMethod.ValueString()
 	}
 
-	if !(data.QueryString.IsNull() || data.QueryString.IsUnknown()) {
+	if !data.QueryString.IsNull() && !data.QueryString.IsUnknown() {
 		objectOpts.QueryString = data.QueryString.ValueString()
 	}
 
 	// Parse nested struct from read_search
-	if !(data.ReadSearch.IsNull() || data.ReadSearch.IsUnknown()) {
+	if !data.ReadSearch.IsNull() && !data.ReadSearch.IsUnknown() {
 		asOpts := basetypes.ObjectAsOptions{UnhandledNullAsEmpty: true, UnhandledUnknownAsEmpty: true}
 		diags.Append(data.ReadSearch.As(ctx, readSearch, asOpts)...)
 	}
 
-	if !(readSearch.SearchKey.IsNull() || readSearch.SearchKey.IsUnknown()) {
+	if !readSearch.SearchKey.IsNull() && !readSearch.SearchKey.IsUnknown() {
 		objectOpts.ReadSearch.SearchKey = readSearch.SearchKey.ValueString()
 	}
 
-	if !(readSearch.SearchValue.IsNull() || readSearch.SearchValue.IsUnknown()) {
+	if !readSearch.SearchValue.IsNull() && !readSearch.SearchValue.IsUnknown() {
 		objectOpts.ReadSearch.SearchValue = readSearch.SearchValue.ValueString()
 	}
 
-	if !(readSearch.ResultKey.IsNull() || readSearch.ResultKey.IsUnknown()) {
+	if !readSearch.ResultKey.IsNull() && !readSearch.ResultKey.IsUnknown() {
 		objectOpts.ReadSearch.ResultKey = readSearch.ResultKey.ValueString()
 	}
 
-	if !(readSearch.QueryString.IsNull() || readSearch.QueryString.IsUnknown()) {
+	if !readSearch.QueryString.IsNull() && !readSearch.QueryString.IsUnknown() {
 		objectOpts.ReadSearch.QueryString = readSearch.QueryString.ValueString()
 	}
 
-	if !(data.ID.IsNull() || data.ID.IsUnknown()) {
+	if !data.ID.IsNull() && !data.ID.IsUnknown() {
 		objectOpts.ID = data.ID.ValueString()
 	}
 
-	if !(data.ObjectID.IsNull() || data.ObjectID.IsUnknown()) {
+	if !data.ObjectID.IsNull() && !data.ObjectID.IsUnknown() {
 		objectOpts.ID = data.ObjectID.ValueString()
 	}
 
-	if !(data.IDAttribute.IsNull() || data.IDAttribute.IsUnknown()) {
+	if !data.IDAttribute.IsNull() && !data.IDAttribute.IsUnknown() {
 		objectOpts.IDAttribute = data.IDAttribute.ValueString()
 	}
 
-	if !(data.IDAttribute.IsNull() || data.IDAttribute.IsUnknown()) {
+	if !data.IDAttribute.IsNull() && !data.IDAttribute.IsUnknown() {
 		objectOpts.IDAttribute = data.IDAttribute.ValueString()
 	}
 
-	if !(data.Data.IsNull() || data.Data.IsUnknown()) {
+	if !data.Data.IsNull() && !data.Data.IsUnknown() {
 		err := json.Unmarshal([]byte(data.Data.ValueString()), &objectOpts.Data)
 		if err != nil {
 			diags.AddError("Can not parse attribute", fmt.Sprintf("%s: %v", err, data.Data))
