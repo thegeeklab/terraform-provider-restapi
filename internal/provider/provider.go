@@ -264,113 +264,113 @@ func (p *RestapiProvider) Configure(
 	clientOpts := &restclient.ClientOptions{}
 	clientOpts.ResponseFilter = &restclient.ResponseFilter{}
 
-	if !(data.Endpoint.IsNull() || data.Endpoint.IsUnknown()) {
+	if !data.Endpoint.IsNull() && !data.Endpoint.IsUnknown() {
 		clientOpts.Endpoint = data.Endpoint.ValueString()
 	}
 
-	if !(data.Insecure.IsNull() || data.Insecure.IsUnknown()) {
+	if !data.Insecure.IsNull() && !data.Insecure.IsUnknown() {
 		clientOpts.Insecure = data.Insecure.ValueBool()
 	}
 
-	if !(data.Username.IsNull() || data.Username.IsUnknown()) {
+	if !data.Username.IsNull() && !data.Username.IsUnknown() {
 		clientOpts.Username = data.Username.ValueString()
 	}
 
-	if !(data.Password.IsNull() || data.Password.IsUnknown()) {
+	if !data.Password.IsNull() && !data.Password.IsUnknown() {
 		clientOpts.Password = data.Password.ValueString()
 	}
 
-	if !(data.Headers.IsNull() || data.Headers.IsUnknown()) {
+	if !data.Headers.IsNull() && !data.Headers.IsUnknown() {
 		resp.Diagnostics.Append(data.Headers.ElementsAs(ctx, &clientOpts.Headers, false)...)
 	}
 
-	if !(data.UseCookies.IsNull() || data.UseCookies.IsUnknown()) {
+	if !data.UseCookies.IsNull() && !data.UseCookies.IsUnknown() {
 		clientOpts.UseCookies = data.UseCookies.ValueBool()
 	}
 
-	if !(data.Timeout.IsNull() || data.Timeout.IsUnknown()) {
+	if !data.Timeout.IsNull() && !data.Timeout.IsUnknown() {
 		clientOpts.Timeout = data.Timeout.ValueInt64()
 	}
 
-	if !(data.IDAttribute.IsNull() || data.IDAttribute.IsUnknown()) {
+	if !data.IDAttribute.IsNull() && !data.IDAttribute.IsUnknown() {
 		clientOpts.IDAttribute = data.IDAttribute.ValueString()
 	}
 
-	if !(data.CreateMethod.IsNull() || data.CreateMethod.IsUnknown()) {
+	if !data.CreateMethod.IsNull() && !data.CreateMethod.IsUnknown() {
 		clientOpts.CreateMethod = data.CreateMethod.ValueString()
 	}
 
-	if !(data.ReadMethod.IsNull() || data.ReadMethod.IsUnknown()) {
+	if !data.ReadMethod.IsNull() && !data.ReadMethod.IsUnknown() {
 		clientOpts.ReadMethod = data.ReadMethod.ValueString()
 	}
 
-	if !(data.UpdateMethod.IsNull() || data.UpdateMethod.IsUnknown()) {
+	if !data.UpdateMethod.IsNull() && !data.UpdateMethod.IsUnknown() {
 		clientOpts.UpdateMethod = data.UpdateMethod.ValueString()
 	}
 
-	if !(data.DestroyMethod.IsNull() || data.DestroyMethod.IsUnknown()) {
+	if !data.DestroyMethod.IsNull() && !data.DestroyMethod.IsUnknown() {
 		clientOpts.DestroyMethod = data.DestroyMethod.ValueString()
 	}
 
-	if !(data.CopyKeys.IsNull() || data.CopyKeys.IsUnknown()) {
+	if !data.CopyKeys.IsNull() && !data.CopyKeys.IsUnknown() {
 		resp.Diagnostics.Append(data.CopyKeys.ElementsAs(ctx, &clientOpts.CopyKeys, false)...)
 	}
 
-	if !(data.ResponseFilter.IsNull() || data.ResponseFilter.IsUnknown()) {
+	if !data.ResponseFilter.IsNull() && !data.ResponseFilter.IsUnknown() {
 		asOpts := basetypes.ObjectAsOptions{UnhandledNullAsEmpty: true, UnhandledUnknownAsEmpty: true}
 		resp.Diagnostics.Append(data.ResponseFilter.As(ctx, respFilter, asOpts)...)
 	}
 
-	if !(respFilter.Keys.IsNull() || respFilter.Keys.IsUnknown()) {
+	if !respFilter.Keys.IsNull() && !respFilter.Keys.IsUnknown() {
 		resp.Diagnostics.Append(respFilter.Keys.ElementsAs(ctx, &clientOpts.ResponseFilter.Keys, false)...)
 	}
 
-	if !(respFilter.Include.IsNull() || respFilter.Include.IsUnknown()) {
+	if !respFilter.Include.IsNull() && !respFilter.Include.IsUnknown() {
 		clientOpts.ResponseFilter.Include = respFilter.Include.ValueBool()
 	}
 
 	clientOpts.DriftDetection = true
-	if !(data.DriftDetection.IsNull() || data.DriftDetection.IsUnknown()) {
+	if !data.DriftDetection.IsNull() && !data.DriftDetection.IsUnknown() {
 		clientOpts.DriftDetection = data.DriftDetection.ValueBool()
 	}
 
-	if !(data.WriteReturnsObject.IsNull() || data.WriteReturnsObject.IsUnknown()) {
+	if !data.WriteReturnsObject.IsNull() && !data.WriteReturnsObject.IsUnknown() {
 		clientOpts.WriteReturnsObject = data.WriteReturnsObject.ValueBool()
 	}
 
-	if !(data.CreateReturnsObject.IsNull() || data.CreateReturnsObject.IsUnknown()) {
+	if !data.CreateReturnsObject.IsNull() && !data.CreateReturnsObject.IsUnknown() {
 		clientOpts.CreateReturnsObject = data.CreateReturnsObject.ValueBool()
 	}
 
-	if !(data.XSSIPrefix.IsNull() || data.XSSIPrefix.IsUnknown()) {
+	if !data.XSSIPrefix.IsNull() && !data.XSSIPrefix.IsUnknown() {
 		clientOpts.XSSIPrefix = data.XSSIPrefix.ValueString()
 	}
 
-	if !(data.RateLimit.IsNull() || data.RateLimit.IsUnknown()) {
+	if !data.RateLimit.IsNull() && !data.RateLimit.IsUnknown() {
 		clientOpts.RateLimit = data.RateLimit.ValueFloat64()
 	}
 
-	if !(data.TestPath.IsNull() || data.TestPath.IsUnknown()) {
+	if !data.TestPath.IsNull() && !data.TestPath.IsUnknown() {
 		clientOpts.TestPath = data.TestPath.ValueString()
 	}
 
-	if !(data.OAuthClientCredentials.IsNull() || data.OAuthClientCredentials.IsUnknown()) {
+	if !data.OAuthClientCredentials.IsNull() && !data.OAuthClientCredentials.IsUnknown() {
 		clientOpts.OAuthClientCredentials = toOAuthCredentials(ctx, data.OAuthClientCredentials)
 	}
 
-	if !(data.CertString.IsNull() || data.CertString.IsUnknown()) {
+	if !data.CertString.IsNull() && !data.CertString.IsUnknown() {
 		clientOpts.CertString = data.CertString.ValueString()
 	}
 
-	if !(data.KeyString.IsNull() || data.KeyString.IsUnknown()) {
+	if !data.KeyString.IsNull() && !data.KeyString.IsUnknown() {
 		clientOpts.KeyString = data.KeyString.ValueString()
 	}
 
-	if !(data.CertFile.IsNull() || data.CertFile.IsUnknown()) {
+	if !data.CertFile.IsNull() && !data.CertFile.IsUnknown() {
 		clientOpts.CertFile = data.CertFile.ValueString()
 	}
 
-	if !(data.KeyFile.IsNull() || data.KeyFile.IsUnknown()) {
+	if !data.KeyFile.IsNull() && !data.KeyFile.IsUnknown() {
 		clientOpts.KeyFile = data.KeyFile.ValueString()
 	}
 
@@ -438,7 +438,7 @@ func toOAuthCredentials(ctx context.Context, credentials types.Object) *restclie
 		return oauthCredentials
 	}
 
-	if !(credentials.IsNull() || credentials.IsUnknown()) {
+	if !credentials.IsNull() && !credentials.IsUnknown() {
 		credentialsMap.Scopes.ElementsAs(ctx, &oauthCredentials.Scopes, false)
 	}
 
