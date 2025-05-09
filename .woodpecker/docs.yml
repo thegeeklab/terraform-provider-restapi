@@ -31,6 +31,9 @@ steps:
     depends_on: [check-unchanged]
     commands:
       - lychee --no-progress --format detailed docs/ README.md
+    environment:
+      GITHUB_TOKEN:
+        from_secret: github_token_ro
 
 depends_on:
   - test
