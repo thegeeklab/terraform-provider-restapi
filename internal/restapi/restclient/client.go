@@ -202,10 +202,10 @@ func (rc *RestClient) SendRequest(ctx context.Context, method, path, data string
 	tflog.Debug(ctx, fmt.Sprintf("method='%s', path='%s', full url (derived)='%s', data='%s'", method, path, url, data))
 
 	if data == "" {
-		req, err = http.NewRequest(method, url, nil)
+		req, err = http.NewRequestWithContext(ctx, method, url, nil)
 	} else {
 		buffer := bytes.NewBuffer([]byte(data))
-		req, err = http.NewRequest(method, url, buffer)
+		req, err = http.NewRequestWithContext(ctx, method, url, buffer)
 
 		// Default of application/json, but allow headers array to overwrite later
 		if err == nil {
