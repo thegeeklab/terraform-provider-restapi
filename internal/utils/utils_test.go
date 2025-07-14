@@ -376,7 +376,6 @@ func TestFilterJSONString(t *testing.T) {
 	for _, tt := range testCase {
 		t.Run(tt.name, func(t *testing.T) {
 			gotMap, gotJSON, err := FilterJSONString(tt.data, tt.keys, tt.include)
-
 			if tt.wantErr != nil {
 				assert.Error(t, err, tt.wantErr)
 
