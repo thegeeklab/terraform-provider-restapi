@@ -4,7 +4,7 @@ go 1.24.5
 
 require (
 	github.com/davecgh/go-spew v1.1.1
-	github.com/hashicorp/terraform-plugin-framework v1.15.0
+	github.com/hashicorp/terraform-plugin-framework v1.15.1
 	github.com/hashicorp/terraform-plugin-log v0.9.0
 	github.com/jarcoal/httpmock v1.4.0
 	github.com/stretchr/testify v1.10.0
