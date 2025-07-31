@@ -3,7 +3,7 @@ GOFUMPT_PACKAGE_VERSION := v0.8.0
 # renovate: datasource=github-releases depName=golangci/golangci-lint
 GOLANGCI_LINT_PACKAGE_VERSION := v2.3.0
 # renovate: datasource=github-releases depName=goreleaser/goreleaser
-GORELEASER_PACKAGE_VERSION := v2.11.1
+GORELEASER_PACKAGE_VERSION := v2.11.2
 # renovate: datasource=docker depName=docker.io/techknowlogick/xgo
 XGO_PACKAGE_VERSION := go-1.24.5
 
