@@ -7,7 +7,7 @@ when:
 
 steps:
   - name: check-unchanged
-    image: docker.io/library/golang:1.24.5
+    image: docker.io/library/golang:1.24.6
     commands:
       - make generate
       - git diff --exit-code
