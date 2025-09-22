@@ -9,7 +9,7 @@ steps:
   - name: check-unchanged
     image: docker.io/library/golang:1.25.1
     commands:
-      - make generate
+      - make deps generate
       - git diff --exit-code
 
   - name: markdownlint
