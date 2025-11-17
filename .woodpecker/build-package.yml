@@ -7,12 +7,12 @@ when:
 
 steps:
   - name: build
-    image: docker.io/library/golang:1.25.3
+    image: docker.io/library/golang:1.25.4
     commands:
       - make deps release
 
   - name: executable
-    image: docker.io/library/golang:1.25.3
+    image: docker.io/library/golang:1.25.4
     commands:
       - $(find dist/ -executable -type f -iwholename *${CI_REPO_NAME}_linux_amd64*/${CI_REPO_NAME}*) --help
 
