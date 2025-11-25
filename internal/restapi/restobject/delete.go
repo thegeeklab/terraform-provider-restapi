@@ -39,7 +39,7 @@ func (ro *RestObject) Delete(ctx context.Context) error {
 
 	_, status, err := ro.client.SendRequest(
 		ctx, opts.DeleteMethod, strings.ReplaceAll(deletePath, "{id}", opts.ID), data)
-	if err != nil && status != http.StatusNotFound {
+	if err != nil && status != http.StatusNotFound && status != http.StatusGone {
 		return err
 	}
 
