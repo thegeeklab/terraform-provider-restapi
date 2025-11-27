@@ -16,27 +16,44 @@ func TestDelete(t *testing.T) {
 	client := newMockClient(t, &restclient.ClientOptions{})
 
 	tests := []struct {
-		name    string
-		key     string
-		wantErr error
-		wantLog string
+		name       string
+		key        string
+		statusCode int
+		wantErr    error
+		wantLog    string
 	}{
 		{
-			name:    "delete id",
-			key:     "valid",
-			wantErr: nil,
-			wantLog: "",
+			name:       "delete id",
+			key:        "valid",
+			statusCode: http.StatusOK,
+			wantErr:    nil,
+			wantLog:    "",
 		},
 		{
-			name:    "empty id",
-			key:     "",
-			wantErr: nil,
-			wantLog: "attempt to delete an object that has no id set",
+			name:       "empty id",
+			key:        "",
+			statusCode: http.StatusOK,
+			wantErr:    nil,
+			wantLog:    "attempt to delete an object that has no id set",
+		},
+		{
+			name:       "delete already deleted (404)",
+			key:        "not-found",
+			statusCode: http.StatusNotFound,
+			wantErr:    nil,
+			wantLog:    "",
+		},
+		{
+			name:       "delete already deleted (410 Gone)",
+			key:        "gone",
+			statusCode: http.StatusGone,
+			wantErr:    nil,
+			wantLog:    "",
 		},
 	}
 	for _, tt := range tests {
 		httpmock.RegisterResponder(client.Options.DestroyMethod, fmt.Sprintf("https://restapi.local/%s", tt.key),
-			httpmock.NewStringResponder(http.StatusOK, "OK"),
+			httpmock.NewStringResponder(tt.statusCode, "OK"),
 		)
 
 		t.Run(tt.name, func(t *testing.T) {
