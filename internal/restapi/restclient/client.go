@@ -253,6 +253,7 @@ func (rc *RestClient) SendRequest(ctx context.Context, method, path, data string
 		}
 	}
 
+	//#nosec G704 // User must configure trusted endpoints
 	resp, err := rc.HTTPClient.Do(req)
 	if err != nil {
 		return "", 0, fmt.Errorf("%w: %s", ErrHTTPRequest, err.Error())
@@ -283,21 +284,21 @@ func (rc *RestClient) ToString() string {
 
 	opts := rc.Options
 
-	buffer.WriteString(fmt.Sprintf("uri: %s\n", opts.Endpoint))
-	buffer.WriteString(fmt.Sprintf("insecure: %t\n", opts.Insecure))
-	buffer.WriteString(fmt.Sprintf("username: %s\n", opts.Username))
-	buffer.WriteString(fmt.Sprintf("password: %s\n", opts.Password))
-	buffer.WriteString(fmt.Sprintf("id_attribute: %s\n", opts.IDAttribute))
-	buffer.WriteString(fmt.Sprintf("write_returns_object: %t\n", opts.WriteReturnsObject))
-	buffer.WriteString(fmt.Sprintf("create_returns_object: %t\n", opts.CreateReturnsObject))
+	fmt.Fprintf(&buffer, "uri: %s\n", opts.Endpoint)
+	fmt.Fprintf(&buffer, "insecure: %t\n", opts.Insecure)
+	fmt.Fprintf(&buffer, "username: %s\n", opts.Username)
+	fmt.Fprintf(&buffer, "password: %s\n", opts.Password)
+	fmt.Fprintf(&buffer, "id_attribute: %s\n", opts.IDAttribute)
+	fmt.Fprintf(&buffer, "write_returns_object: %t\n", opts.WriteReturnsObject)
+	fmt.Fprintf(&buffer, "create_returns_object: %t\n", opts.CreateReturnsObject)
 	buffer.WriteString("headers:\n")
 
 	for k, v := range opts.Headers {
-		buffer.WriteString(fmt.Sprintf(" %s: %s\n", k, v))
+		fmt.Fprintf(&buffer, " %s: %s\n", k, v)
 	}
 
 	for _, n := range opts.CopyKeys {
-		buffer.WriteString(fmt.Sprintf("  %s", n))
+		fmt.Fprintf(&buffer, "  %s", n)
 	}
 
 	return buffer.String()
