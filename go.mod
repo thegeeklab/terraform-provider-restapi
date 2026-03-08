@@ -9,7 +9,7 @@ require (
 	github.com/jarcoal/httpmock v1.4.1
 	github.com/stretchr/testify v1.11.1
 	golang.org/x/oauth2 v0.36.0
-	golang.org/x/time v0.14.0
+	golang.org/x/time v0.15.0
 )
 
 require (
