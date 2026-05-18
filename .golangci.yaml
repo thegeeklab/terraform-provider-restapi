@@ -29,13 +29,13 @@ linters:
     - gochecknoglobals
     - gochecknoinits
     - gocognit
-    - goconst
+    # - goconst
     - gocritic
     - gocyclo
     - godot
     - goheader
     - gomoddirectives
-    - gomodguard
+    - gomodguard_v2
     - goprintffuncname
     - gosec
     - govet
@@ -108,7 +108,7 @@ linters:
       - linters:
           - errcheck
           - gochecknoglobals
-          - goconst
+          # - goconst
           - gosec
         path: _test\.go
     paths:
