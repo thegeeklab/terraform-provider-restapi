@@ -108,7 +108,7 @@ linters:
       - linters:
           - errcheck
           - gochecknoglobals
-          # - goconst
+          - goconst
           - gosec
         path: _test\.go
     paths:
