@@ -3,7 +3,6 @@
 Terraform provider to interact with a generic REST API.
 
 [![Build Status](https://ci.thegeeklab.de/api/badges/thegeeklab/terraform-provider-restapi/status.svg)](https://ci.thegeeklab.de/repos/thegeeklab/terraform-provider-restapi)
-[![Go Report Card](https://goreportcard.com/badge/github.com/thegeeklab/terraform-provider-restapi)](https://goreportcard.com/report/github.com/thegeeklab/terraform-provider-restapi)
 [![GitHub contributors](https://img.shields.io/github/contributors/thegeeklab/terraform-provider-restapi)](https://github.com/thegeeklab/terraform-provider-restapi/graphs/contributors)
 [![Source: GitHub](https://img.shields.io/badge/source-github-blue.svg?logo=github&logoColor=white)](https://github.com/thegeeklab/terraform-provider-restapi)
 [![License: Apache-2.0](https://img.shields.io/github/license/thegeeklab/terraform-provider-restapi)](https://github.com/thegeeklab/terraform-provider-restapi/blob/main/LICENSE)
