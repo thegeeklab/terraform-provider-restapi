@@ -75,8 +75,8 @@ func (ro *RestObject) Find(
 
 		tmp, err := utils.GetStringAtKey(hash, searchKey)
 		if err != nil {
-			return resp, (fmt.Errorf("%w: %w: failed to get value of '%s' in results array at '%s'",
-				ErrFindResponse, err, searchKey, resultKey))
+			return resp, fmt.Errorf("%w: %w: failed to get value of '%s' in results array at '%s'",
+				ErrFindResponse, err, searchKey, resultKey)
 		}
 
 		// Record found

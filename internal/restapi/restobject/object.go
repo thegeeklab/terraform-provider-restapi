@@ -167,7 +167,8 @@ func (ro *RestObject) setData(ctx context.Context, state string) error {
 
 	// Store filtered response body.
 	opts.APIResponse, opts.APIResponseRaw, err = utils.FilterJSONString(
-		state, ro.client.Options.ResponseFilter.Keys, ro.client.Options.ResponseFilter.Include)
+		state, ro.client.Options.ResponseFilter.Keys, ro.client.Options.ResponseFilter.Include,
+	)
 	if err != nil {
 		return err
 	}
