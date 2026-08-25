@@ -41,7 +41,8 @@ func (ro *RestObject) Create(ctx context.Context) error {
 	}
 
 	resultString, _, err := ro.client.SendRequest(
-		ctx, opts.CreateMethod, strings.ReplaceAll(postPath, "{id}", opts.ID), data)
+		ctx, opts.CreateMethod, strings.ReplaceAll(postPath, "{id}", opts.ID), data,
+	)
 	if err != nil {
 		return err
 	}

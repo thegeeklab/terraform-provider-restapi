@@ -32,7 +32,8 @@ func (ro *RestObject) Update(ctx context.Context) error {
 	}
 
 	resultString, _, err := ro.client.SendRequest(
-		ctx, opts.UpdateMethod, strings.ReplaceAll(opts.PutPath, "{id}", opts.ID), data)
+		ctx, opts.UpdateMethod, strings.ReplaceAll(opts.PutPath, "{id}", opts.ID), data,
+	)
 	if err != nil {
 		return err
 	}
